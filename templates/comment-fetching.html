@@ -1,0 +1,118 @@
+{% extends 'master.html' %}
+
+{% load static %}
+
+{% block page-title %}Youtube Sentiment Analysis{% endblock %}
+
+{% block page-styles %}{% endblock %}
+
+
+{% block page-content %}
+	    
+	 <p style="font-size: 40px; text-align: center; margin-top:  6%;"><b>COMMENTS FETCHING</b> </p>
+	<div class="m2">
+		  <div class="p1">
+		  
+        <b style="padding: 5%;">    Insert URL</b>
+			<div id="myform"> 
+ 
+    <form   class="form-contain">
+
+        <label>
+            <input type="text" placeholder="Insert URL Here..." name="name" required>
+        </label>
+
+        <button type="submit" class="btn" >Fetch Comments</button>
+   </form>
+		  
+	</div>
+			  </div>
+			  
+          <div class="p2">
+		  
+		  <a href="{% url 'cfetch' %}"><img src="{% static 'images/sentiment-analysis-for-youtube-comments.heic' %}"  alt="logo" width="98%"></a>
+		  
+		  
+		  </div>
+			   
+		</div><br>
+	<div class="table">
+	
+	<table border="4px" cellpadding="30px" cellspacing="5px" >
+	<thead>	
+	<tr>
+	<th>No.</th>	
+	<th>Video ID</th>	
+	<th>Comments</th>	
+	<th>Label Data(Positive, Negative & Neutral)</th>
+	 	
+	</tr>	
+	</thead>
+	<tbody>
+	<tr>
+	<td>1.</td><td></td><td></td><td></td> 	
+	</tr>
+		
+	<tr>
+	<td>2.</td><td></td><td></td><td></td> 	
+	</tr>
+		
+	<tr>
+	<td>3.</td><td></td><td></td><td></td> 	
+	</tr>
+	
+	<tr>
+	<td>4.</td><td></td><td></td><td></td> 	
+	</tr>
+		
+	<tr>
+		<td>5.</td><td></td><td></td><td></td>	
+	</tr>	
+	
+	<tr>
+	<td>6.</td><td></td><td></td><td></td> 	
+	</tr>	
+	</tbody>		
+	
+	</table>
+	</div>
+	
+	 
+ 
+ 
+   
+		 
+ 
+	
+	
+	
+	
+	
+	
+	
+ 
+	  <p style="font-size: 25px; margin-left: 25px;"><b>Comments data in csv file</b> </p>
+	 <form   class="form-contain">
+          <label for="w3review"></label> <textarea id="w3review" name="w3review" rows="20" cols="160">
+
+         </textarea>
+	 </form>
+	 <div class="my-btn" >
+	    <button type="submit" class="btn" style="margin-left: 25px;">Save</button>
+ 
+	</div>
+ 
+<p style="font-size: 25px; text-align: center;   padding: 30px;"><b>Do you want to analyze sentiment or to detect spam?</b> </p>
+
+<div class="my-btnn"  >
+ <div style="text-align: center;">
+	<a href="{% url 'sanalysis' %}" ><button type="submit" class="btn">Analyzer</button></a>
+	<a href="{% url 'sdetection' %}"><button type="submit" class="btn">Detector</button></a>
+</div>
+	</div>
+	
+	<br><br>
+ 
+ {% endblock %}
+
+{% block page-scripts %}{% endblock %}

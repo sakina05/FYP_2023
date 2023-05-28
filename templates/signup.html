@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel='stylesheet'>
+
+
+    <title>Youtube sentiment Analytics | Sign Up</title>
+
+</head>
+<body>
+<div class="main">
+    <div class="part1">
+
+        <div style="text-align: center;">
+            <p style="color: white; margin-top: 6%; margin-left: 2%;  font-size: 40px;"><b>Youtube Sentiment
+                Analysis</b></p>
+
+
+        </div>
+
+
+    </div>
+    <div class="part2">
+        <br><br>
+        <div class="login">
+            <div class="box">
+                <div class="login-table">
+
+                    <div class="top">
+                        <header>Sign Up</header>
+
+
+
+                       {% csrf_token %}
+                       {% for field in reg_form %}
+                        <div class="input-field">
+
+                            <label class="control-label mb-10" for="{{ field.id_for_label }}">
+                {{ field.label }}
+                {% if field.field.required %}
+                    <span class="text-danger">*</span>
+                {% endif %}
+            </label>
+             {{ field }}
+            {% if field.errors %}
+                {{ field.errors }}
+            {% endif %}
+
+
+        </div>
+
+         {% endfor %}
+
+{#                            <input type="text" class="input" placeholder="Username" id="">#}
+{#                            <i class="bx bx-user"></i>#}
+{#                        </div>#}
+{#                        <div class="input-field">#}
+{#                            <input type="email" class="input" placeholder="email" id="">#}
+{#                            <i class="bx bx-user"></i>#}
+{#                        </div>#}
+{#                        <div class="input-field">#}
+{#                            <input type="Password" class="input" placeholder="Password" id="">#}
+{#                            <i class="bx bx-lock-alt"></i>#}
+{#                        </div>#}
+{#                        <div class="input-field">#}
+{#                            <input type="Password" class="input" placeholder="Re-Password" id="">#}
+{#                            <i class="bx bx-lock-alt"></i>#}
+{#                        </div>#}
+
+
+                        <div class="input-field">
+
+                            <a href="{% url 'homepage' %}"> <input type="submit" class="submit" value="Sign Up" id=""> </a>
+                        </div>
+
+
+                        <div class="top">
+                            <br>
+                            <span>Already have an account?<a href="{% url 'index' %}"  style="color: white;"><b>Log In</b> </a></span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

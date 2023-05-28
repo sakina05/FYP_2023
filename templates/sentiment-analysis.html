@@ -1,0 +1,67 @@
+{% extends 'master.html' %}
+
+{% load static %}
+
+{% block page-title %}Youtube Sentiment Analysis{% endblock %}
+
+{% block page-styles %}{% endblock %}
+
+
+{% block page-content %}
+<div class="m2">
+    <div class="p1">
+        <h1 style="font-size: 40px; padding: 25px; align-items: center;"><b>Sentiment Analysis</b></h1>
+        <p style="font-size: 130%; text-align: justify; padding: 25px; ">
+            YouTube sentiment analysis can be applied in various contexts, including brand monitoring, market research,
+            content creation, and customer feedback analysis. By analyzing the sentiments expressed by YouTube users,
+            content creators and marketers can optimize their strategies, engage with their audience, and improve the
+            overall user experience.
+        </p>
+        <button class="btn">Start Analyzing!</button>
+
+    </div>
+
+
+    <div class="p2">
+
+        <a href="{% url 'sanalysis' %}"><img
+                src="{% static 'images/4059220_1592205269_Untitled-2.jpg' %}" alt="logo"
+                width="98%"></a>
+
+
+    </div>
+
+</div>
+<br>
+
+
+<p style="font-size: 20px;     padding: 10px;"><b> Table shows sentiment label Comments</b></p>
+
+<form class="form-contain">
+    <label for="w3review"></label><textarea id="w3review" name="w3review" rows="20" cols="160">
+        </textarea>
+ </form>
+
+
+<div class="analyzer">
+    <div class="form">
+        <form>
+            <p style="font-size:40px;"><b>Sentiment Analyzer</b></p><br>
+            <label>
+                <input placeholder="Enter your Sentence" type="text" required>
+            </label>
+
+            <button type="submit" class="btn">Analyzer</button>
+        </form>
+    </div>
+
+</div>
+
+<div>
+    <button type="submit" class="btnn">Result</button>
+
+</div>
+
+ {% endblock %}
+
+{% block page-scripts %}{% endblock %}

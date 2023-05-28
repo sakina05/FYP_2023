@@ -1,0 +1,69 @@
+{% extends 'master.html' %}
+
+{% load static %}
+
+{% block page-title %}About Us{% endblock %}
+
+{% block page-styles %}{% endblock %}
+
+
+{% block page-content %}
+	
+<div class="about-section">
+  <h1 style="font-size: 50px;">About Us </h1>
+  <p> </p>
+  <p> </p>
+</div>
+
+<h2 style="text-align:center; padding:20px; font-size: 50px;">Our Team</h2>
+<div class="row">
+  <div class="column">
+    <div class="cardd">
+      <img src="{% static 'images/sakina.png' %}" alt="sakina" style="width:100%">
+      <div class="containn ">
+        <h2>Sakina Shahzad</h2>
+        <p class="title">Programmer</p>
+        <p> developing the software or application based on the project requirements.</p>
+        <br><p>sakinashahzad789@gmail.com</p><br>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="cardd">
+      <img src="{% static 'images/moon.png' %}"  alt="Moon" style="width:100%"  >
+      <div class="containn">
+        <h2>Moon Haider</h2>
+        <p class="title">Web Designer</p>
+        <p>creating the visual elements, layout, and overall design of website.</p>
+        <br><p>moonhaider7602@gmail.com</p><br>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="cardd">
+      <img src="{% static 'images/zoha.png' %}"  alt="zoha" style="width:100%">
+      <div class="containn">
+        <h2>Zoha Eman</h2>
+        <p class="title"> Project Manager</p>
+<p> Overseeing and coordinating all aspects of project to ensure its successful completion</p><br>
+        <p>zohaeeman21@gmail.com</p><br>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+</div>	
+	
+
+{% endblock %}
+
+{% block page-scripts %}{% endblock %}
+	
+
+	
+	
+	
+	

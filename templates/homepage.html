@@ -1,0 +1,104 @@
+{% extends 'master.html' %}
+
+{% load static %}
+
+{% block page-title %}Youtube Sentiment Analysis{% endblock %}
+
+{% block page-styles %}{% endblock %}
+
+
+{% block page-content %}
+<div id="mainn"  >
+    <div>
+        <div style="text-align: center;">
+            <br>
+            <h1 style="font-size: 40px; color:lemonchiffon; font-family:sans-serif "><b>Youtube Sentiment Analysis</b></h1><br>
+            <p style="font-size: 25px; text-align:center; color:white; "> the process of analyzing and understanding the
+                sentiment or emotions expressed by users in the comments, likes, dislikes, and other interactions on
+                YouTube videos.The main objective of YouTube sentiment analysis is to determine whether the sentiment
+                expressed by users is positive, negative, or neutral towards a particular video or topic.
+            </p><br>
+
+            <button class="explore_btn"><a href="{% url 'cfetch' %}">Get Started Now </a></button>
+        </div>
+    </div>
+
+    <br>
+    <div>
+
+        <div style="text-align: center;">
+            <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
+                 src="{% static 'images/youtube-users-960x502.webp' %}">
+        </div>
+    </div>
+    </div>
+    <div style="text-align: center;"><p style="font-size: 60px; margin-top:10%; font-family:'bigshot-one',serif;"><b>Categorize</b></p></div>
+
+    <div class="m1">
+        <div class="p1">
+            <div style="text-align: center;">
+                <b> Comments Fetching</b>
+            </div>
+            <p style="padding: 25px;">The process of retrieving the comments left by users on a particular video or
+                channel. This can be done using YouTube's API (Application Programming Interface), which allows
+                developers to programmatically access and retrieve data from the YouTube platform.</p>
+
+        </div>
+        <div class="p2">
+
+            <a href="{% url 'cfetch' %}"><img
+                    src= "{% static 'images/sentiment-analysis-for-youtube-comments.heic' %}" alt="logo" style="width: 98%; height: 300px;"></a>
+
+
+        </div>
+    </div>
+
+
+    <div class="m1">
+        <div class="p2">
+
+
+            <a href="{% url 'sanalysis' %}"> <img
+                    src="{% static 'images/sentiment_analysis.jpg' %}" alt="logo"
+                    style="width: 98%; height: 320px;"></a>
+
+
+        </div>
+        <div class="p1">
+
+            <div style="text-align: center;">
+                <b> Sentiment Analysis</b>
+            </div>
+            <p style="padding: 25px;"> Sentiment analysis in YouTube involves analyzing the sentiment or emotions
+                expressed by users in comments, likes, dislikes, and other interactions on YouTube videos. The goal is
+                to understand the overall sentiment of the audience towards a particular video or topic.</p>
+
+
+        </div>
+
+    </div>
+
+
+    <div class="m1">
+        <div class="p1">
+
+            <div style="text-align: center;">
+                <b> Spam Detection</b>
+            </div>
+            <p style="padding: 25px;">Spam detection in YouTube involves identifying and filtering out irrelevant,
+                misleading, or malicious content that violates YouTube's policies and guidelines. It aims to maintain
+                the quality and integrity of the platform by preventing the dissemination of spammy or harmful
+                content. </p>
+
+        </div>
+        <div class="p2">
+
+            <a href="{% url 'sdetection' %}"> <img
+                    src="{% static 'images/youtube-analytics-63db7f2648c60-sej-760x400.webp' %}" alt="logo"
+                    style="width: 97%; height: 290px;"></a>
+
+        </div>
+    </div>
+ {% endblock %}
+
+{% block page-scripts %}{% endblock %}

@@ -1,0 +1,53 @@
+{% load static %}
+<footer>
+    <div class="footer_container  ">
+        <div class="footer_logo">
+            <img src="{% static 'images/pngegg.png' %}" alt="logo"
+                 width="80px"/>
+        </div>
+        <div class="link_lists">
+            <h1 style="color: darkred;"><b>Main Links</b></h1>
+            <ul>
+                <li><a href="{% url 'cfetch' %}">Comments Fetching</a></li>
+                <li><a href="{% url 'sanalysis' %}">Sentiment Analysis</a></li>
+                <li><a href="{% url 'sdetection' %}">Spam Detection</a></li>
+                <li><a href="{% url 'models' %}"">ML Models</a></li>
+            </ul>
+        </div>
+        <div class="link_lists">
+            <h1><b>Support</b></h1>
+            <ul>
+                <li><a href="{% url 'aboutus' %}">About Us</a></li>
+                <li><a href="{% url 'aboutus' %}">Privacy Policy</a></li>
+                <li><a href="{% url 'aboutus' %}">Contact Us</a></li>
+
+            </ul>
+        </div>
+        <div class="news_letter">
+            <h3 style="color: darkred; ; "><b>Message...</b></h3>
+            <label>
+                <input type="email" placeholder="Enter your Message..." style="height:35px"/>
+            </label>
+            <button type="submit" style="background-color: grey; ">ok</button>
+            <h3 style="color: white;"><b>Follow Us</b></h3>
+            <div class="icon_container">
+                <div class="icon">
+                    <img src="{% static 'images/Youtube Icon.png' %}" alt="logo"
+                         width="40px">
+                </div>
+                <div class="icon">
+                    <img src="{% static 'images/kindpng_300712.png' %}" alt="logo"
+                         width="40px">
+                </div>
+                <div class="icon">
+                    <img src="{% static 'images/instagram.png' %}" alt="logo"
+                         width="45px">
+                </div>
+                <div class="icon">
+                    <img src="{% static 'images/Facebook.png' %}" alt="logo"
+                         width="50px">
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

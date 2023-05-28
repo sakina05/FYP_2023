@@ -1,0 +1,36 @@
+{% load static %}
+<header>
+    <nav class="container">
+        <div class="logo">
+            <a href="{% url 'homepage' %}"> <img src="{% static 'images/pngegg.png' %}" width="100%" alt="logo "  ></a></div>
+        <ul>
+            <div class="dropdown">
+                <a href="{% url 'homepage' %}">
+                     <li style="font-size: 18px;"> Home<img src="{% static 'images/white-triangle-icon-10.jpg' %}" width="12px" height="4%" alt="logo" style=" margin-left: 9px;">
+                </a>
+                        <div class="dropdown-content">
+                            <a href="{% url 'models' %}">Models</a>
+                        </div>
+
+            </div>
+
+
+
+                    <li style="font-size: 18px;"> <a href="{% url 'cfetch' %}">Comment Fetching </a></li>
+
+
+                    <li style="font-size: 18px;"><a href="{% url 'sanalysis' %}">Sentiment Analysis</a></li>
+
+
+                    <li style="font-size: 18px;"><a href="{% url 'sdetection' %}">Spam Detection</a></li>
+
+
+                    <li style="font-size: 18px;"><a href="{% url 'aboutus' %}"> About Us</a></li>
+
+
+                    <li style="font-size: 18px;"> <a href="{% url 'index' %}">Logout</a></li>
+
+
+        </ul>
+    </nav>
+</header>

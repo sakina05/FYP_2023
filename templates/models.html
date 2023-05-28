@@ -1,0 +1,149 @@
+{% extends 'master.html' %}
+
+{% load static %}
+
+{% block page-title %}Youtube Sentiment Analysis{% endblock %}
+
+{% block page-styles %}{% endblock %}
+
+
+{% block page-content %}
+	  
+	   
+  <div style="text-align: center;">
+    <p style="font-size: 60px; margin:6%;  "><b>Machine Learning Models</b></p>
+   </div>
+	   
+	   
+ <section class="work">
+      <div class="grid_item">
+        <div class="card">
+          <div class="image_container">
+            <img src="{% static 'images/Naive-Bayes-Algorithm.jpg' %}" alt="naive bayes" width="100%"/>
+          </div>
+          <div class="card_content">
+            <h3>Naive Bayes Algorithm</h3>
+            <p>The Naïve Bayes algorithm is a classification algorithm that is based on Bayes' theorem.Naïve Bayes can often perform well, especially in text classification and spam filtering tasks
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="grid_item">
+        <div class="card">
+          <div class="image_container">
+            <img src="{% static 'images/fnagi-09-00329-g001.jpg' %}" alt="RF" width="98%" >
+          </div>
+          <div class="card_content">
+            <h3>Random Forest</h3>
+            <p>
+              Random forest combines the output of multiple decision trees to reach a single result.It handles both classification and regression problems. 
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="grid_item">
+        <div class="card">
+          <div class="image_container">
+            <img src="{% static 'images/Capture.JPG' %}" alt="D TREE" width="100%"/>
+          </div>
+          <div class="card_content">
+            <h3>Decision Tree Classifier</h3>
+            <p> It creates a flowchart-like structure, where each internal node represents a feature, each branch represents a decision based on that feature, and each leaf node represents a class label or outcome.
+            </p>
+          </div>
+        </div>  
+      </div>
+    </section>	
+	   
+<section class="work">
+      <div class="grid_item">
+        <div class="card">
+          <div class="image_container">
+            <img src="{% static 'images/1_KoAzQLM1zDi5s9yTR9V6hw.webp' %}" alt="LR" width="100%"/>
+          </div>
+          <div class="card_content">
+            <h3>Logistic Regression</h3>
+            <p>  It models the relationship between the input variables (features) and the probability of a binary outcome.
+            </p>
+          </div>
+        </div>
+      </div>	   
+	   <div class="grid_item">
+        <div class="card">
+          <div class="image_container">
+            <img src="{% static 'images/SVM-Algorithm.png.webp' %}" alt=" svm" width="100%" />
+          </div>
+          <div class="card_content">
+            <h3>support vector machine (SVM) </h3>
+            <p>
+               It aims to find an optimal hyperplane or decision boundary that separates data points into different classes while maximizing the margin between the classes.
+
+             </p>
+          </div>
+        </div>
+      </div> 
+	 <div class="grid_item">
+        <div class="card">
+          <div class="image_container">
+            <img src="{% static 'images/istockphoto-1435226158-170667a.jpg' %}" alt="GBC" width="100%"/>
+          </div>
+          <div class="card_content">
+            <h3>Gradient Boosting Classifier</h3>
+            <p>a functional gradient algorithm that repeatedly selects a function that leads in the direction of a weak hypothesis or negative gradient so that it can minimize a loss function.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+   <div style="text-align: center;">
+    <p style="font-size: 60px; margin-top:10%;  "><b>Deep Learning Models</b></p>
+</div>
+
+	   
+ <section class="work">
+      <div class="grid_item">
+        <div class="card">
+          <div class="image_container">
+            <img src="{% static 'images/Long_Short_Term_Memory_(LSTM)_Models.webp' %}" alt="LSTM" width="100%"/>
+          </div>
+          <div class="card_content">
+            <h3> Long short-term memory (LSTM)</h3>
+            <p>
+              It is designed to handle long-term dependencies and capture sequential information in data. It is commonly used for natural language processing and time series analysis.
+            </p>
+          </div>
+        </div>
+      </div>
+	 
+	 
+     
+ 
+      <div class="grid_item">
+        <div class="card">
+          <div class="image_container">
+            <img src="{% static 'images/abstract-connected-dots-lines-blue-background-communication-technology-network-concept-with-moving-lines-dots_34629-1120.avif' %}" alt="Roberta" width="100%"/>
+          </div>
+          <div class="card_content">
+            <h3>convolutional neural network (CNN)</h3>
+            <p> CNN is used for image recognition and tasks that involve the processing of pixel data. 
+            </p>
+          </div>
+        </div>
+      </div>
+ 
+    </section>	
+	   
+ {% endblock %}
+
+{% block page-scripts %}{% endblock %}
