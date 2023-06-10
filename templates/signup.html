@@ -36,16 +36,16 @@
                         <header>Sign Up</header>
 
 
-
+<form method="post">
                        {% csrf_token %}
                        {% for field in reg_form %}
                         <div class="input-field">
 
                             <label class="control-label mb-10" for="{{ field.id_for_label }}">
                 {{ field.label }}
-                {% if field.field.required %}
-                    <span class="text-danger">*</span>
-                {% endif %}
+{#                {% if field.field.required %}#}
+{#                    <span class="text-danger">*</span>#}
+{#                {% endif %}#}
             </label>
              {{ field }}
             {% if field.errors %}
@@ -76,10 +76,10 @@
 
                         <div class="input-field">
 
-                            <a href="{% url 'homepage' %}"> <input type="submit" class="submit" value="Sign Up" id=""> </a>
+                           <input type="submit" class="submit" value="Sign Up" id="">
                         </div>
 
-
+</form>
                         <div class="top">
                             <br>
                             <span>Already have an account?<a href="{% url 'index' %}"  style="color: white;"><b>Log In</b> </a></span>

@@ -8,111 +8,120 @@
 
 
 {% block page-content %}
-	    
-	 <p style="font-size: 40px; text-align: center; margin-top:  6%;"><b>COMMENTS FETCHING</b> </p>
-	<div class="m2">
-		  <div class="p1">
-		  
-        <b style="padding: 5%;">    Insert URL</b>
-			<div id="myform"> 
- 
-    <form   class="form-contain">
 
-        <label>
-            <input type="text" placeholder="Insert URL Here..." name="name" required>
-        </label>
+<p style="font-size: 40px; text-align: center; margin-top: 6%;"><b>COMMENTS FETCHING</b> </p>
+<div class="m2">
+    <div class="p1">
+        <b style="padding: 5%;">Insert URL</b>
+        <div id="myform">
+            <form class="form-contain" method="post" action="{% url 'fetch_comments' %}">
+                {% csrf_token %}
+                <label>
+                    <input type="text" placeholder="Insert URL Here..." name="url" required>
+                </label>
 
-        <button type="submit" class="btn" >Fetch Comments</button>
-   </form>
-		  
-	</div>
-			  </div>
-			  
-          <div class="p2">
-		  
-		  <a href="{% url 'cfetch' %}"><img src="{% static 'images/sentiment-analysis-for-youtube-comments.heic' %}"  alt="logo" width="98%"></a>
-		  
-		  
-		  </div>
-			   
-		</div><br>
-	<div class="table">
-	
-	<table border="4px" cellpadding="30px" cellspacing="5px" >
-	<thead>	
-	<tr>
-	<th>No.</th>	
-	<th>Video ID</th>	
-	<th>Comments</th>	
-	<th>Label Data(Positive, Negative & Neutral)</th>
-	 	
-	</tr>	
-	</thead>
-	<tbody>
-	<tr>
-	<td>1.</td><td></td><td></td><td></td> 	
-	</tr>
-		
-	<tr>
-	<td>2.</td><td></td><td></td><td></td> 	
-	</tr>
-		
-	<tr>
-	<td>3.</td><td></td><td></td><td></td> 	
-	</tr>
-	
-	<tr>
-	<td>4.</td><td></td><td></td><td></td> 	
-	</tr>
-		
-	<tr>
-		<td>5.</td><td></td><td></td><td></td>	
-	</tr>	
-	
-	<tr>
-	<td>6.</td><td></td><td></td><td></td> 	
-	</tr>	
-	</tbody>		
-	
-	</table>
-	</div>
-	
-	 
- 
- 
-   
-		 
- 
-	
-	
-	
-	
-	
-	
-	
- 
-	  <p style="font-size: 25px; margin-left: 25px;"><b>Comments data in csv file</b> </p>
-	 <form   class="form-contain">
-          <label for="w3review"></label> <textarea id="w3review" name="w3review" rows="20" cols="160">
+                <button type="submit" class="btn">Fetch Comments</button>
+            </form>
+        </div>
+    </div>
 
-         </textarea>
-	 </form>
-	 <div class="my-btn" >
-	    <button type="submit" class="btn" style="margin-left: 25px;">Save</button>
- 
-	</div>
- 
-<p style="font-size: 25px; text-align: center;   padding: 30px;"><b>Do you want to analyze sentiment or to detect spam?</b> </p>
-
-<div class="my-btnn"  >
- <div style="text-align: center;">
-	<a href="{% url 'sanalysis' %}" ><button type="submit" class="btn">Analyzer</button></a>
-	<a href="{% url 'sdetection' %}"><button type="submit" class="btn">Detector</button></a>
+    <div class="p2">
+        <a href="{% url 'cfetch' %}"><img src="{% static 'images/sentiment-analysis-for-youtube-comments.heic' %}" alt="logo" width="98%"></a>
+    </div>
 </div>
-	</div>
-	
-	<br><br>
- 
- {% endblock %}
+<br>
+    {% if message %}
+    <p style="font-size: medium; text-align: center; font-family: Arial, sans-serif;">{{ message_1 }}</p>
+     {% endif %}
+
+
+
+<div class="table">
+    <table border="4px" cellpadding="30px" cellspacing="5px">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Video ID</th>
+                <th>URL</th>
+                <th>Total Comments</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comment_info in comments %}
+            <tr>
+                <td>{{ forloop.counter }}.</td>
+                <td>{{ comment_info.video_id }}</td>
+                <td>{{ comment_info.url }}</td>
+                <td>{{ comment_info.total_comments }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{##}
+{##}
+{#<p style="font-size: 25px; margin-left: 25px;"><b>Comments data in csv file</b> </p>#}
+{#<form class="form-contain">#}
+{#    <label for="w3review"></label>#}
+{#    <textarea id="w3review" name="w3review" rows="20" cols="160"></textarea>#}
+{#</form>#}
+
+<!-- Table for top 5 comments -->
+{% if top_comments %}
+<div class="table">
+    <table border="4px" cellpadding="30px" cellspacing="5px">
+        <thead>
+            <tr>
+                <th>Comment ID</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comments in top_comments %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ comments }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<div class="my-btn" style="text-align: center;">
+  <p style="font-size: 18px; color: #333; font-weight: bold;">Want the full dataset?</p>
+  <p style="font-size: 16px; color: #777; margin-bottom: 10px;">Click the button below to save all the comments.</p>
+  <form action="{% url 'save_csv' %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn" style="margin-left: 25px; padding: 10px 15px; font-size: 18px; color: white; border: none; border-radius: 4px; cursor: pointer;">Save Comments</button>
+  </form>
+</div>
+
+    <div class="my-btn" style="text-align: center;">
+  <p style="font-size: 18px; color: #333; font-weight: bold;">Want to clean comments?</p>
+  <p style="font-size: 16px; color: #777; margin-bottom: 10px;">Click the button below to clean the comments.</p>
+  <form action="{% url 'clean_comments' %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn" style="margin-left: 25px; padding: 10px 15px; font-size: 18px; color: white; background-color: #f44336; border: none; border-radius: 4px; cursor: pointer;">Clean Comments</button>
+  </form>
+
+  {% if message %}
+    <p style="font-size: 16px; color: #333; margin-top: 10px;">{{ messages }}</p>
+  {% endif %}
+</div>
+
+
+    <p style="font-size: 25px; text-align: center; padding: 30px;"><b>Do you want to analyze sentiment or to detect spam?</b> </p>
+
+<div class="my-btnn">
+    <div style="text-align: center;">
+        <a href="{% url 'sanalysis' %}"><button type="submit" class="btn">Analyzer</button></a>
+        <a href="{% url 'sdetection' %}"><button type="submit" class="btn">Detector</button></a>
+    </div>
+</div>
+
+<br><br>
+
+{% endblock %}
 
 {% block page-scripts %}{% endblock %}

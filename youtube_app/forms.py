@@ -1,6 +1,6 @@
-from django import forms
+import django
 
-from youtube_app.models import User
+from .models import User
 
 
 Customer = 1
@@ -10,22 +10,22 @@ CITY_NAME_CHOICES = (
     (CT_Provider, 'CT Provider')
 )
 
-class BasicRegForm(forms.ModelForm):
-    username = forms.CharField(
+class BasicRegForm(django.forms.ModelForm):
+    username = django.forms.CharField(
         min_length=4, max_length=15,
-        widget=forms.TextInput(attrs={'class': 'input', 'placeholder': 'User Name'})
+        widget=django.forms.TextInput(attrs={'class': 'input', 'placeholder': 'User Name'})
     )
-    email = forms.EmailField(
+    email = django.forms.EmailField(
         min_length=6, max_length=40,
-        widget=forms.TextInput(attrs={'class': 'input', 'placeholder': 'Email Address'})
+        widget=django.forms.TextInput(attrs={'class': 'input', 'placeholder': 'Email Address'})
     )
-    password = forms.CharField(
+    password = django.forms.CharField(
         min_length=6, max_length=20,
-        widget=forms.PasswordInput(render_value=False, attrs={'placeholder': 'Password', 'class': 'input'})
+        widget=django.forms.PasswordInput(render_value=False, attrs={'placeholder': 'Password', 'class': 'input'})
     )
 
-    confirm_password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'placeholder': 'Repeat Password', 'class': 'input'})
+    confirm_password = django.forms.CharField(
+        widget=django.forms.PasswordInput(attrs={'placeholder': 'Repeat Password', 'class': 'input'})
     )
 
     class Meta:
@@ -35,23 +35,28 @@ class BasicRegForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Email already exists")
+            raise django.forms.ValidationError("Email already exists")
         return email
 
     def clean_password(self):
         password = self.cleaned_data['password']
         confirm_password = self.data['confirm_password']
         if password != confirm_password:
-            raise forms.ValidationError("password does not matched")
+            raise django.forms.ValidationError("password does not matched")
         return password
 
-class LoginForm(forms.Form):
-    username = forms.CharField(
-        min_length=4, max_length=15,
-        widget=forms.TextInput(attrs={'class': 'input', 'placeholder': 'User Name'})
+class LoginForm(django.forms.Form):
+    username = django.forms.CharField(
+        min_length=4, max_length=50,
+        widget=django.forms.TextInput(attrs={'class': 'input', 'placeholder': 'Email'})
     )
-    password = forms.CharField(
+    password = django.forms.CharField(
         min_length=6, max_length=20,
-        widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'input'})
+        widget=django.forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'input'})
     )
+
+from django import forms
+
+class YouTubeForm(forms.Form):
+    url = forms.URLField(label='YouTube URL', required=True)
 
