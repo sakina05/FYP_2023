@@ -1,7 +1,7 @@
 import django
-
+from django import forms
+from .models import YoutubeVideoId
 from .models import User
-
 
 Customer = 1
 CT_Provider = 0
@@ -9,7 +9,6 @@ CITY_NAME_CHOICES = (
     (Customer, 'Customer'),
     (CT_Provider, 'CT Provider')
 )
-
 class BasicRegForm(django.forms.ModelForm):
     username = django.forms.CharField(
         min_length=4, max_length=15,
@@ -46,17 +45,22 @@ class BasicRegForm(django.forms.ModelForm):
         return password
 
 class LoginForm(django.forms.Form):
-    username = django.forms.CharField(
-        min_length=4, max_length=50,
-        widget=django.forms.TextInput(attrs={'class': 'input', 'placeholder': 'Email'})
+    email = forms.EmailField(
+        min_length=6, max_length=40,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'})
     )
-    password = django.forms.CharField(
+    password = forms.CharField(
         min_length=6, max_length=20,
-        widget=django.forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'input'})
+        widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'})
     )
 
-from django import forms
+class YoutubeUrlForm(forms.Form):
+    video_id = forms.CharField(
+        min_length=10, max_length=100,
+        widget=forms.TextInput(attrs={'class': '', 'placeholder': 'Enter URLs here'})
+    )
 
-class YouTubeForm(forms.Form):
-    url = forms.URLField(label='YouTube URL', required=True)
+
+
+
 

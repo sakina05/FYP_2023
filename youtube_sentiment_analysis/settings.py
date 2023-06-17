@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+from celery.schedules import crontab
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -140,3 +142,65 @@ STATICFILES_FINDERS = (
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+AUTH_USER_MODEL = 'youtube_app.User'
+# LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = 'index/'
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
+SESSION_COOKIE_SECURE = False
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# Celery settings
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_STORE_ERRORS_EVEN_IF_IGNORED = True
+CELERY_TASK_ALWAYS_EAGER = True
+CELERY_TIMEZONE = 'UTC'
+CELERY_IMPORTS = ("youtube_app.task",)
+
+CELERY_BEAT_SCHEDULE = {
+    'my-periodic-task': {
+         'task': 'youtube_app.task.task_one',
+         'schedule': crontab(minute='*/1'),  # Run every 6 hours
+     },
+    'fetch-comments-task': #1
+         {
+             'task': 'youtube_app.task.fetch_comments',
+             'schedule': crontab(minute='*/5'),
+         },
+    'data-labeling': #4
+        {
+             'task': 'youtube_app.task.comment_labeling',
+             'schedule': crontab(minute='*/10'),
+         },
+    'language-detection':   #2
+         {
+             'task': 'youtube_app.task.language_detect',
+             'schedule': crontab(minute='*/10'),
+         },
+    'comment-cleaning':   #3
+         {
+             'task': 'youtube_app.task.clean_comment',
+             'schedule': crontab(minute='*/3'),
+         },
+    # 'extract-emoji':
+    #     {
+    #         'task': 'my_app.task.emoji',
+    #         'schedule': crontab(minute='*/3'),
+    #     },
+    'eng-model':
+        {
+            'task': 'youtube_app.task.english_model',
+            'schedule': crontab(minute='*/1')
+        },
+
+
+}
+
+API_SERVICE_NAME = "youtube"
+API_VERSION = "v3"
+DEVELOPER_KEY = 'AIzaSyBVXy2hSnTQ9okjjgG9Bd1gm1wavuAwYV4'
