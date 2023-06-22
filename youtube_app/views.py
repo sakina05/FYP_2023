@@ -1,6 +1,10 @@
 
 from datetime import datetime
+
+import mpld3
 import nltk
+from matplotlib import pyplot as plt
+
 nltk.download('vader_lexicon')
 
 from django.conf import settings
@@ -18,7 +22,8 @@ from .forms import BasicRegForm, LoginForm, YoutubeUrlForm
 
 import googleapiclient.discovery
 import googleapiclient.errors
-from .models import Comments, YoutubeVideoId
+from .models import Comments, YoutubeVideoId, EmojiesInComments, EnglishComment
+
 
 def homepage(request):
     return render(request, "homepage.html")
@@ -198,15 +203,88 @@ from django.db.models import Count
 
 
 def abc(request):
-    videos = YoutubeVideoId.objects.all().annotate(comment_count=Count('comments'))
-
-    for video in videos:
-        print(video.video_id)
-        comments_count = len(Comments.objects.filter(video_id=video.video_id))
-        video.comment_count = comments_count
-        video.save()
-        print(comments_count)
+    demo_video_id = YoutubeVideoId.objects.all()
+    for video_item in demo_video_id:
+        print(video_item)
+        print(len(Comments.objects.filter(video_id=video_item.video_id)))
         print("-------------------------------\n")
+    print(demo_video_id)
+    return HttpResponse(f"Recorded Inserted {demo_video_id} Here")
 
-    return HttpResponse("Comments count updated successfully")
+
+def ploting_accuracy():
+    labels = ['XGBoost', 'Decision Tree', 'SVM', 'Naive Bayes']
+    accuracies = [90.7, 86.6, 89, 78]
+    colors = ['lightblue', 'lightgreen', 'lightcoral', 'orange']
+    fig = plt.figure(figsize=(15, 5))
+    plt.bar(labels, accuracies, color=colors)
+    plt.title('Classifier Accuracies for Urdu')
+    plt.xlabel('Classifier')
+    plt.ylabel('Accuracy')
+    plt.ylim(0.0, 100.0)  # Set y-axis limit from 0 to 100
+
+    for i, v in enumerate(accuracies):
+        plt.text(i, v + 1, str(v), ha='center', va='bottom')
+
+    return mpld3.fig_to_html(fig)
+
+
+def count_comment_per_video():
+    v_count = Comments.objects.values('video_id').annotate(count=Count('video_id'))
+    video_counts_list = list(v_count.values_list('count', flat=True))
+    video_counts_id = list(v_count.values_list('video_id', flat=True))
+    fig, ax = plt.subplots()
+    ax.set_title("Comments w.r.t Video")
+    ax.pie(video_counts_list, labels=video_counts_id)
+
+    return mpld3.fig_to_html(fig)
+
+
+def fetch_eng_comments(request, video_id):
+    context = {}
+    counts_senti = ''
+    counts_pie_senti = ''
+    fetch_data = EnglishComment.objects.filter(video_id=video_id, label__isnull=False)
+    if fetch_data.count() > 0:
+        counts_senti = video_sentiment_count(fetch_data)
+        counts_pie_senti = video_sentiment_pie(fetch_data)
+    context['gr1'] = counts_senti
+    context['gr2'] = counts_pie_senti
+    return render(request, 'comment-fetching.html', context)
+
+def fetch_emoji_comments(request, video_id):
+    context = {}
+    counts_senti = ''
+    counts_pie_senti = ''
+    fetch_data = EmojiesInComments.objects.filter(video_id=video_id, label__isnull=False)
+    if fetch_data.count() > 0:
+        counts_senti = video_sentiment_count(fetch_data)
+        counts_pie_senti = video_sentiment_pie(fetch_data)
+    context['gr1'] = counts_senti
+    context['gr2'] = counts_pie_senti
+    return render(request, 'comment-fetching.html', context)
+
+
+def video_sentiment_count(vide_data):
+    fig = plt.figure(figsize=(15, 5))
+    v_count = vide_data.values('label').annotate(count=Count('label'))
+    video_counts_list = list(v_count.values_list('count', flat=True))
+    video_counts_id = list(v_count.values_list('label', flat=True))
+    colors = ['grey', 'red', 'blue', 'green']
+    plt.bar(video_counts_id, video_counts_list, color=colors)
+    plt.title('Count Sentiment')
+    plt.xlabel('Sentiment')
+    plt.ylabel('Counts')
+    return mpld3.fig_to_html(fig)
+#
+#
+def video_sentiment_pie(vide_data):
+    fig = plt.figure(figsize=(15, 5))
+    v_count = vide_data.values('label').annotate(count=Count('label'))
+    video_counts_list = list(v_count.values_list('count', flat=True))
+    video_counts_id = list(v_count.values_list('label', flat=True))
+    fig, ax = plt.subplots()
+    ax.set_title("Comments w.r.t Sentiments")
+    ax.pie(video_counts_list, labels=video_counts_id)
+    return mpld3.fig_to_html(fig)
 

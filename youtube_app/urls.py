@@ -13,9 +13,9 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     # other URL patterns
     path('fetch-comm/', views.fetch_comments, name='fetch-comm'),
+    path('eng-comments/<str:video_id>/', views.fetch_eng_comments, name='fetch-eng'),
+    path('emoji-comments/<str:video_id>/', views.fetch_emoji_comments, name='fetch-emoji'),
     path('abc/', views.abc, name='abc')
-
-
 ]
 
 

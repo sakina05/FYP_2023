@@ -57,7 +57,20 @@ class LoginForm(django.forms.Form):
 class YoutubeUrlForm(forms.Form):
     video_id = forms.CharField(
         min_length=10, max_length=100,
-        widget=forms.TextInput(attrs={'class': '', 'placeholder': 'Enter URLs here'})
+        widget=forms.TextInput(attrs={'class': 'form-control px-4', 'placeholder': 'Enter Urls here'})
+    )
+
+    def clean_video_id(self):
+        video_url = self.cleaned_data['video_id']
+        if YoutubeVideoId.objects.filter(video_url=video_url).exists():
+            raise forms.ValidationError("Video url already exists")
+        return video_url
+
+
+class SentimentAnalyzeForm(forms.Form):
+    input_text = forms.CharField(
+        min_length=10, max_length=100,
+        widget=forms.TextInput(attrs={'class': 'form-control px-4', 'placeholder': 'Enter Text here'})
     )
 
 

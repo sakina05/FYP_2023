@@ -1,7 +1,4 @@
-
-from .models import EnglishComment
 import re
-import nltk
 import emoji
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
@@ -75,7 +72,7 @@ def sentiment_analyzers(comment):
 def detect_lang(comment):
     try:
         lang_code = detect(comment)
-        if lang_code in ['en', 'ur']:
+        if lang_code in ['en']:
             return lang_code
     except LangDetectException as e:
         # Handle the exception when no features are detected
@@ -92,3 +89,8 @@ def comment_cleaning(comment):
     start_cleaning = ' '.join(start_cleaning)
     start_cleaning = re.sub(r'[@%?&!#$^*:;/\|=-><.]', '', start_cleaning)
     return start_cleaning
+
+def find_emoji_text(comment):
+    emoji_list = [c for c in comment if c in emoji.UNICODE_EMOJI["en"]]
+    clean_emoji = " ".join([chr for chr in comment if any(i in chr for i in emoji_list)])
+    return clean_emoji

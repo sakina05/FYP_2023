@@ -58,6 +58,16 @@
                 <td style="padding: 10px; border: 1px solid #ccc;">{{ forloop.counter }}</td>
                 <td style="padding: 10px; border: 1px solid #ccc;"><a href="{{ video.video_url }}", style="color: black;">{{ video.id }}</a></td>
                 <td style="padding: 10px; border: 1px solid #ccc;">{{ video.comment_video.count }}</td>
+                <td style="padding: 10px; border: 1px solid #ccc;">
+                        <a href="/eng-comments/{{ video.id }}/" type="button" style="background-color: #800000; color: white;border-radius: 5px;">
+                            English
+                        </a>
+                        <a href="/urdu-comments/{{ video.id }}/" type="button" style="background-color: #800000; color: white;border-radius: 5px;">Urdu
+                        </a>
+                        <a href="/emoji-comments/{{ video.id }}/" type="button" style="background-color: #800000; color: white;border-radius: 5px;">
+                            Emoji
+                        </a>
+                    </td>
             </tr>
         {% endfor %}
     </table>
