@@ -1,11 +1,14 @@
 import re
 import emoji
+from emot.emo_unicode import UNICODE_EMOJI
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from langdetect import detect, LangDetectException
+
 sentiments = SentimentIntensityAnalyzer()
+
 
 def get_video_comments(youtube, **kwargs):
     comments = []
@@ -58,6 +61,7 @@ def get_video_comments(youtube, **kwargs):
 
     return comments
 
+
 def sentiment_analyzers(comment):
     sentiment = ''
     compound_score = sentiments.polarity_scores(comment)["compound"]
@@ -69,6 +73,7 @@ def sentiment_analyzers(comment):
         sentiment = 'Neutral'
     return sentiment
 
+
 def detect_lang(comment):
     try:
         lang_code = detect(comment)
@@ -79,16 +84,20 @@ def detect_lang(comment):
         # print(f"Error detecting language: {str(e)}")
         return ""
 
+
 def comment_cleaning(comment):
     start_cleaning = re.sub(r'http\S+', '', comment)
     start_cleaning = word_tokenize(start_cleaning.lower())
     stop_words = set(stopwords.words('english'))
     start_cleaning = [word for word in start_cleaning if word not in stop_words]
-    lemmatizer = WordNetLemmatizer()
-    start_cleaning = [lemmatizer.lemmatize(word) for word in start_cleaning]
     start_cleaning = ' '.join(start_cleaning)
-    start_cleaning = re.sub(r'[@%?&!#$^*:;/\|=-><.]', '', start_cleaning)
-    return start_cleaning
+    start_cleaning = re.sub(r'[@%?&!#$^*::/\|=-><.]', '', start_cleaning)
+    characters = [chr for chr in comment]
+    emoji_list = [c for c in comment if c in emoji.UNICODE_EMOJI["en"]]
+    clean_text = ''.join([c for c in characters if c not in emoji_list])
+    clean_emoji = " ".join([chr for chr in comment if any(i in chr for i in emoji_list)])
+    return clean_text, clean_emoji
+
 
 def find_emoji_text(comment):
     emoji_list = [c for c in comment if c in emoji.UNICODE_EMOJI["en"]]

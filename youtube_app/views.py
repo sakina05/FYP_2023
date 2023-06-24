@@ -250,7 +250,7 @@ def fetch_eng_comments(request, video_id):
         counts_pie_senti = video_sentiment_pie(fetch_data)
     context['gr1'] = counts_senti
     context['gr2'] = counts_pie_senti
-    return render(request, 'comment-fetching.html', context)
+    return render(request, 'sentiment-analysis.html', context)
 
 def fetch_emoji_comments(request, video_id):
     context = {}
@@ -262,7 +262,7 @@ def fetch_emoji_comments(request, video_id):
         counts_pie_senti = video_sentiment_pie(fetch_data)
     context['gr1'] = counts_senti
     context['gr2'] = counts_pie_senti
-    return render(request, 'comment-fetching.html', context)
+    return render(request, 'sentiment-analysis.html', context)
 
 
 def video_sentiment_count(vide_data):

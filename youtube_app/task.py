@@ -14,10 +14,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn import model_selection
-import xgboost as xgb
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import train_test_split
+
 model_dir = os.path.join(settings.BASE_DIR, 'models')
+
 
 @shared_task
 def task_one():
@@ -76,20 +78,34 @@ def comment_labeling():
     #         if lan_code == 'en':
     #             comment.label = sentiment_analyzers(comment.original_text)
     #             comment.save()
-    for comment1 in EmojiesClean.objects.filter(label=''):
+    for comment1 in CleanedComment.objects.filter(label=''):
         comment1.label = sentiment_analyzers(comment1.original_text)
         comment1.save()
     print("Comments labeling done")
 
+def ecomment_labeling():
+    print("length of comment", len(CleanedComment.objects.all()))
+    # for comment in CleanedComment.objects.filter(label=''):
+    #     print(comment.original_text)
+    #     if len(comment.original_text) > 10:
+    #         lan_code = detect_lang(comment.original_text)
+    #         if lan_code == 'en':
+    #             comment.label = sentiment_analyzers(comment.original_text)
+    #             comment.save()
+    for comment1 in EmojiesClean.objects.filter(label=''):
+        comment1.label = sentiment_analyzers(comment1.original_text)
+        comment1.save()
+    print("Emojies labeling done")
 
 
 @shared_task
 def clean_comment():
     print("Inside task clean data or data preprocessing")
     CleanedComment.objects.all().delete()
-    for comment in EnglishComment.objects.all():
+    for comment in Comments.objects.all():
         try:
-            clean_text, clean_emoji,  = comment_cleaning(comment.original_text)
+            clean_text, clean_emoji = comment_cleaning(comment.original_text)
+            print(clean_text)
             CleanedComment.objects.create(
                 comment_id=comment.comment_id,
                 video_id=YoutubeVideoId.objects.get(id=comment.video_id),
@@ -106,30 +122,6 @@ def clean_comment():
             print(f"Cleaning comment failed: {e}")
 
 
-@shared_task
-def language_detect():
-    # print("length of comment", len(Comments.objects.all()))
-    EnglishComment.objects.all().delete()
-    UrduComment.objects.all().delete()
-    for comment in Comments.objects.all():
-        # print(comment.original_text)
-        if len(comment.original_text) > 5:
-            lang_code = detect_lang(comment.original_text)
-            if lang_code == 'en':
-                EnglishComment.objects.create(
-                    comment_id=comment.comment_id,
-                    video_id=YoutubeVideoId.objects.get(id=comment.video_id),
-                    original_text=comment.original_text,
-                    parent_id=comment.parent_id,
-                    author_name=comment.author_name,
-                    channel_id=comment.channel_id,
-                    published_at=comment.published_at,
-                    created_at=datetime.today(),
-                    update_at=comment.update_at,
-                    label=comment.label
-                )
-
-    print("Detecting the language")
 
 
 @shared_task
@@ -146,12 +138,11 @@ def english_model():
     y = encoder.fit_transform(df['label'])
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    params = {'objective': 'multi:softmax', 'num_class': 3, 'n_estimators': 100}
-    xgb_model = xgb.XGBClassifier(**params)
-    xgb_model.fit(X_train, y_train)
-    y_pred = xgb_model.predict(X_test)
+    dt_model = DecisionTreeClassifier()
+    dt_model.fit(X_train, y_train)
+    y_pred = dt_model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
-    joblib.dump(xgb_model, os.path.join(model_dir, 'eng_xg_boost.h5'))
+    joblib.dump(dt_model, os.path.join(model_dir, 'eng_decision_tree.h5'))
     print("English Accuracy:", accuracy)
 
 
@@ -161,21 +152,20 @@ def e_model():
     data = list(queryset.values())
     df = pd.DataFrame(data)
 
-    print(type(df))
-    print(df.columns)
     vectorizer = CountVectorizer()
     X = vectorizer.fit_transform(df['original_text'])
     encoder = LabelEncoder()
     y = encoder.fit_transform(df['label'])
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    params = {'objective': 'multi:softmax', 'num_class': 3, 'n_estimators': 100}
-    xgb_model = xgb.XGBClassifier(**params)
-    xgb_model.fit(X_train, y_train)
-    y_pred = xgb_model.predict(X_test)
+    # Create and train the Decision Tree Classifier
+    dt_model = DecisionTreeClassifier()
+    dt_model.fit(X_train, y_train)
+    y_pred = dt_model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
-    joblib.dump(xgb_model, os.path.join(model_dir, 'emoji_xg_boost.h5'))
+    joblib.dump(dt_model, os.path.join(model_dir, 'emoji_decision_tree.h5'))
     print("Emoji Accuracy:", accuracy)
+
 
 def insert_comments_into_database(comment):
     Comments.objects.create(
@@ -209,6 +199,7 @@ def emoji_extraction():
                 update_at=comment.update_at,
                 label=comment.label
             )
+
 
 @shared_task()
 def demoji_the_emoji():
