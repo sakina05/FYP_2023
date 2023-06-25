@@ -25,6 +25,7 @@ class Comments(models.Model):
     created_at = models.DateField(default=None)
     update_at = models.DateTimeField()
     label = models.CharField(max_length=255, default=None)
+    spamlabel = models.CharField(max_length=255, default=None)
 
     def __str__(self):
         return f'{self.video_id} - {self.author_name} - {self.channel_id}'
@@ -95,6 +96,25 @@ class CleanedComment(models.Model):
     update_at = models.DateTimeField()
     cleaned_date = models.DateTimeField(auto_now_add=True)
     label = models.CharField(max_length=255, default=None)
+    # Add any other fields you need
+
+    def __str__(self):
+        return f'{self.video_id} - {self.author_name} - {self.channel_id}'
+
+
+class SpamCleanComment(models.Model):
+    comment_id = models.CharField(max_length=255)
+    video_id = models.ForeignKey(YoutubeVideoId, related_name='scomment_video', on_delete=models.CASCADE)
+    original_text = models.TextField()
+    parent_id = models.CharField(max_length=255, default=None)
+    author_name = models.CharField(max_length=255)
+    channel_id = models.CharField(max_length=255)
+    published_at = models.DateTimeField()
+    created_at = models.DateField(default=None)
+    update_at = models.DateTimeField()
+    cleaned_date = models.DateTimeField(auto_now_add=True)
+    label = models.CharField(max_length=255, default=None)
+    spamlabel = models.CharField(max_length=255, default=None)
     # Add any other fields you need
 
     def __str__(self):

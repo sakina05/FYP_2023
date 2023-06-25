@@ -83,6 +83,7 @@ def comment_labeling():
         comment1.save()
     print("Comments labeling done")
 
+@shared_task
 def ecomment_labeling():
     print("length of comment", len(CleanedComment.objects.all()))
     # for comment in CleanedComment.objects.filter(label=''):
@@ -178,7 +179,8 @@ def insert_comments_into_database(comment):
         published_at=comment['published_at'],
         created_at=datetime.today(),
         update_at=comment['updated_at'],
-        label=comment['label']
+        label=comment['label'],
+        spamlabel=comment['spamlabel']
     )
 
 
@@ -218,3 +220,26 @@ def demoji_the_emoji():
             update_at=comment.update_at,
             label=comment.label
         )
+@shared_task
+def spamclean_comment():
+    print("Inside task clean data or data preprocessing")
+    SpamCleanComment.objects.all().delete()
+    for comment in Comments.objects.all():
+        try:
+            start_cleaning = spamcomment_cleaning(comment.original_text)
+            print(start_cleaning)
+            SpamCleanComment.objects.create(
+                comment_id=comment.comment_id,
+                video_id=YoutubeVideoId.objects.get(id=comment.video_id),
+                original_text=start_cleaning,
+                parent_id=comment.parent_id,
+                author_name=comment.author_name,
+                channel_id=comment.channel_id,
+                published_at=comment.published_at,
+                created_at=comment.created_at,
+                update_at=comment.update_at,
+                label=comment.label,
+                spamlabel=comment.spamlabel
+            )
+        except Exception as e:
+            print(f"Spam Cleaning comment failed: {e}")

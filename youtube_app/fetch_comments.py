@@ -30,7 +30,8 @@ def get_video_comments(youtube, **kwargs):
                         'published_at': item['snippet']['topLevelComment']['snippet']['publishedAt'],
                         'updated_at': item['snippet']['topLevelComment']['snippet']['updatedAt'],
                         'parent_id': '',
-                        'label': ''
+                        'label': '',
+                        'spamlabel':''
                     }
                     comments.append(dict_comment)
             if int(item['snippet']['totalReplyCount']) > 0:
@@ -49,7 +50,8 @@ def get_video_comments(youtube, **kwargs):
                                 'author_cid': reply['snippet']['authorChannelId'],
                                 'published_at': reply['snippet']['publishedAt'],
                                 'updated_at': reply['snippet']['updatedAt'],
-                                'label': ''
+                                'label': '',
+                                'spamlabel': ''
                             }
                             comments.append(dict_replies)
 
@@ -103,3 +105,51 @@ def find_emoji_text(comment):
     emoji_list = [c for c in comment if c in emoji.UNICODE_EMOJI["en"]]
     clean_emoji = " ".join([chr for chr in comment if any(i in chr for i in emoji_list)])
     return clean_emoji
+
+
+
+def spamcomment_cleaning(comment):
+    start_cleaning = re.sub(r'http\S+', '', comment)
+    start_cleaning = word_tokenize(start_cleaning.lower())
+    stop_words = set(stopwords.words('english'))
+    start_cleaning = [word for word in start_cleaning if word not in stop_words]
+    start_cleaning = ' '.join(start_cleaning)
+    start_cleaning = re.sub(r'[@%?&!#$^*::/\|=-><.]', '', start_cleaning)
+    return start_cleaning
+
+
+def label_spam_comments(comment):
+    spam_words = ['win', 'prize', 'cash', 'money', 'lottery', 'free', 'offer', 'gift', 'deal', 'sale']
+    spam_emojis = ['\U0001F4B0', '\U0001F381', '\U0001F4B8', '\U0001F4B5', '\U0001F3AF', '\U0001F195', '\U0001F381', '\U0001F381', '\U0001F4B0']
+    spam_chars = ['$', '%', '!', '@']
+    spam_urls = ['http', 'https', 'www.', 'bit.ly']
+    sid = SentimentIntensityAnalyzer()
+    labels = []
+    sentiments = []
+    for comment in comment:
+        # Sentiment Analysis
+        sentiment = sentiment_analyzers(comment)
+        sentiments.append(sentiment)
+
+        # Check for spam words
+        if any(word in comment.lower() for word in spam_words):
+            labels.append('spam')
+            continue
+
+        # Check for spam emojis
+        if any(emoji in comment for emoji in spam_emojis):
+            labels.append('spam')
+            continue
+
+        # Check for spam characters
+        if any(char in comment for char in spam_chars):
+            labels.append('spam')
+            continue
+
+        # Check for spam URLs
+        if any(url in comment.lower() for url in spam_urls):
+            labels.append('spam')
+            continue
+
+        # Otherwise, label as ham
+        labels.append('ham')

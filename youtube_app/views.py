@@ -186,7 +186,8 @@ def fetch_comments(request):
                         published_at=comment['published_at'],
                         created_at=datetime.today(),
                         update_at=comment['updated_at'],
-                        label=comment['label']
+                        label=comment['label'],
+                        spamlabel=comment['spamlabel']
                     )
 
                 # Update the comment count for the video

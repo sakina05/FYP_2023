@@ -163,12 +163,12 @@ CELERY_TIMEZONE = 'UTC'
 CELERY_IMPORTS = ("youtube_app.task",)
 
 CELERY_BEAT_SCHEDULE = {
-    # done
+    # # done
     # 'fetch-comments-task':
     #     {
     #         'task': 'youtube_app.task.fetch_comments',
-    #         # 'schedule': crontab(minute='*/5'),
-    #         'schedule': crontab(hour=0, minute=2),
+    #          'schedule': crontab(minute='*/1'),
+    #         # 'schedule': crontab(hour=0, minute=2),
     #     },
     # # 4 done
     # 'data-labeling':
@@ -178,12 +178,12 @@ CELERY_BEAT_SCHEDULE = {
     #         # 'schedule': crontab(hour=3, minute=2),
     #     },
     # # 4 done
-    'dataa-labeling':
-        {
-            'task': 'youtube_app.task.ecomment_labeling',
-            'schedule': crontab(minute='*/1'),
-            # 'schedule': crontab(hour=3, minute=2),
-        },
+    # 'dataa-labeling':
+    #     {
+    #         'task': 'youtube_app.task.ecomment_labeling',
+    #         'schedule': crontab(minute='*/1'),
+    #         # 'schedule': crontab(hour=3, minute=2),
+    #     },
 
     # # 3 done
     # 'comment-cleaning':
@@ -210,14 +210,19 @@ CELERY_BEAT_SCHEDULE = {
     #         'schedule': crontab(minute='*/1'),
     # #         'schedule': crontab(hour=5, minute=2)
     #      },
-    # 'clean_emji_model':
-    #     {
-    #         'task': 'youtube_app.task.e_model',
-    #         'schedule': crontab(minute='*/1'),
-    #         # 'schedule': crontab(hour=7, minute=2)
+    #  'clean_emji_model':
+    #      {
+    #          'task': 'youtube_app.task.e_model',
+    #          'schedule': crontab(minute='*/1'),
+    # #         # 'schedule': crontab(hour=7, minute=2)
     #     },
+    'spam_cleaning':
+        {
+            'task': 'youtube_app.task.spamclean_comment',
+            'schedule': crontab(minute='*/1'),
+            #         # 'schedule': crontab(hour=7, minute=2)
+        },
 }
-
 
 
 API_SERVICE_NAME = "youtube"
