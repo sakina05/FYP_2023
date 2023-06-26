@@ -216,12 +216,25 @@ CELERY_BEAT_SCHEDULE = {
     #          'schedule': crontab(minute='*/1'),
     # #         # 'schedule': crontab(hour=7, minute=2)
     #     },
-    'spam_cleaning':
-        {
-            'task': 'youtube_app.task.spamclean_comment',
-            'schedule': crontab(minute='*/1'),
-            #         # 'schedule': crontab(hour=7, minute=2)
-        },
+    # 'spam_cleaning':
+    #     {
+    #         'task': 'youtube_app.task.spamclean_comment',
+    #         'schedule': crontab(minute='*/1'),
+    #         #         # 'schedule': crontab(hour=7, minute=2)
+    #     },
+    # 'spam_labeling':
+    #     {
+    #         'task': 'youtube_app.task.spamcomment_labeling',
+    #         'schedule': crontab(minute='*/1'),
+    #         #         # 'schedule': crontab(hour=7, minute=2)
+    #     },
+    'spam_model':
+          {
+              'task': 'youtube_app.task.spam_model',
+              'schedule': crontab(minute='*/1'),
+     #         # 'schedule': crontab(hour=7, minute=2)
+         },
+
 }
 
 

@@ -4,6 +4,7 @@ from datetime import datetime
 import mpld3
 import nltk
 from matplotlib import pyplot as plt
+from wordcloud import WordCloud
 
 nltk.download('vader_lexicon')
 
@@ -22,7 +23,8 @@ from .forms import BasicRegForm, LoginForm, YoutubeUrlForm
 
 import googleapiclient.discovery
 import googleapiclient.errors
-from .models import Comments, YoutubeVideoId, EmojiesInComments, EnglishComment
+from .models import Comments, YoutubeVideoId, EmojiesInComments, EnglishComment, CleanedComment, EmojiesClean, \
+    SpamCleanComment
 
 
 def homepage(request):
@@ -212,14 +214,13 @@ def abc(request):
     print(demo_video_id)
     return HttpResponse(f"Recorded Inserted {demo_video_id} Here")
 
-
 def ploting_accuracy():
-    labels = ['XGBoost', 'Decision Tree', 'SVM', 'Naive Bayes']
+    labels = ['Random Forest', 'Decision Tree', 'STOCHASTIC GRADIENT DESCENT', 'Naive Bayes']
     accuracies = [90.7, 86.6, 89, 78]
     colors = ['lightblue', 'lightgreen', 'lightcoral', 'orange']
     fig = plt.figure(figsize=(15, 5))
     plt.bar(labels, accuracies, color=colors)
-    plt.title('Classifier Accuracies for Urdu')
+    plt.title('Classifier Accuracies for Analysis')
     plt.xlabel('Classifier')
     plt.ylabel('Accuracy')
     plt.ylim(0.0, 100.0)  # Set y-axis limit from 0 to 100
@@ -251,23 +252,23 @@ def fetch_eng_comments(request, video_id):
         counts_pie_senti = video_sentiment_pie(fetch_data)
     context['gr1'] = counts_senti
     context['gr2'] = counts_pie_senti
-    return render(request, 'sentiment-analysis.html', context)
+    return render(request, 'eng_comment.html', context)
 
 def fetch_emoji_comments(request, video_id):
     context = {}
     counts_senti = ''
     counts_pie_senti = ''
-    fetch_data = EmojiesInComments.objects.filter(video_id=video_id, label__isnull=False)
+    fetch_data = EmojiesClean.objects.filter(video_id=video_id, label__isnull=False)
     if fetch_data.count() > 0:
         counts_senti = video_sentiment_count(fetch_data)
         counts_pie_senti = video_sentiment_pie(fetch_data)
     context['gr1'] = counts_senti
     context['gr2'] = counts_pie_senti
-    return render(request, 'sentiment-analysis.html', context)
+    return render(request, 'emj_comment.html', context)
 
 
 def video_sentiment_count(vide_data):
-    fig = plt.figure(figsize=(15, 5))
+    fig = plt.figure(figsize=(8, 5))
     v_count = vide_data.values('label').annotate(count=Count('label'))
     video_counts_list = list(v_count.values_list('count', flat=True))
     video_counts_id = list(v_count.values_list('label', flat=True))
@@ -280,7 +281,7 @@ def video_sentiment_count(vide_data):
 #
 #
 def video_sentiment_pie(vide_data):
-    fig = plt.figure(figsize=(15, 5))
+    fig = plt.figure(figsize=(8, 5))
     v_count = vide_data.values('label').annotate(count=Count('label'))
     video_counts_list = list(v_count.values_list('count', flat=True))
     video_counts_id = list(v_count.values_list('label', flat=True))
@@ -289,3 +290,58 @@ def video_sentiment_pie(vide_data):
     ax.pie(video_counts_list, labels=video_counts_id)
     return mpld3.fig_to_html(fig)
 
+def visualization(request):
+    text1 = []
+    graph_1 = CleanedComment.objects.all().values_list('original_text', flat=True)
+    for text in graph_1:
+        text1.append(text.encode('utf-8'))
+    wordcloud = WordCloud(width=800, height=400, max_words=100, background_color='white')
+    wordcloud.generate(' '.join(text1.decode('utf-8') if isinstance(text1, bytes) else str(text1) for text1 in text1))
+    abf = plt.figure(figsize=(8, 5))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis('off')
+    html_fig = mpld3.fig_to_html(abf)
+    accuracy_grapg = ploting_accuracy()
+    total_video_comment = count_comment_per_video()
+    context = {
+        'gr1': html_fig,
+        'gr2': accuracy_grapg,
+        'gr3': total_video_comment,
+    }
+    return render(request, 'sentvisualization.html', context)
+
+def spamvisualization(request):
+    text1 = []
+    graph_1 = SpamCleanComment.objects.all().values_list('original_text', flat=True)
+    for text in graph_1:
+        text1.append(text.encode('utf-8'))
+    wordcloud = WordCloud(width=800, height=400, max_words=100, background_color='white')
+    wordcloud.generate(' '.join(text1.decode('utf-8') if isinstance(text1, bytes) else str(text1) for text1 in text1))
+    abf = plt.figure(figsize=(8, 5))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis('off')
+    html_fig = mpld3.fig_to_html(abf)
+    accuracy_grapg = spamploting_accuracy()
+    # total_video_comment = count_comment_per_video()
+    context = {
+        'gr1': html_fig,
+        'gr2': accuracy_grapg,
+        # 'gr3': total_video_comment,
+    }
+    return render(request, 'spamvisualization.html', context)
+
+def spamploting_accuracy():
+    labels = ['LOGISTIC REGRESSION', 'SVM','GRADIENT BOOSTING']
+    accuracies = [95, 84.6, 97]
+    colors = ['lightblue', 'lightgreen', 'lightcoral', 'orange']
+    fig = plt.figure(figsize=(8, 5))
+    plt.bar(labels, accuracies, color=colors)
+    plt.title('Classifier Accuracies for Analysis')
+    plt.xlabel('Classifier')
+    plt.ylabel('Accuracy')
+    plt.ylim(0.0, 100.0)  # Set y-axis limit from 0 to 100
+
+    for i, v in enumerate(accuracies):
+        plt.text(i, v + 1, str(v), ha='center', va='bottom')
+
+    return mpld3.fig_to_html(fig)

@@ -13,32 +13,20 @@
  <div class="p1">
 		<h1 style="font-size: 40px; padding: 25px; align-items: center;" ><b>Spam Detection</b></h1>
           <p style="font-size: 130%; text-align: justify; padding: 25px; "> 
-		Spam detection in YouTube involves identifying and filtering out irrelevant, misleading, or malicious content that violates YouTube's policies and guidelines. YouTube employs various techniques and algorithms to detect and combat spam. 
+		YouTube spam detection is an algorithm that automatically identifies and filters out spam comments on YouTube videos, ensuring a cleaner and more relevant comment section for users. It uses various techniques like content analysis, pattern recognition, and machine learning to accurately identify and flag spam comments. Spam detection in YouTube involves identifying and filtering out irrelevant, misleading, or malicious content that violates YouTube's policies and guidelines.
           </p>
-			<button class="btn" >Start Detecting!</button>	  
-		  
+{#			<button class="btn" >Start Detecting!</button>	  #}
+		  <a href="/svisualize/" class="btn">Visualization</a>
 	</div>
-			  
-			  
           <div class="p2">
-		  
 		  <a href="{% url 'sdetection' %}"><img src="{% static 'images/spam-messages-detection.png' %}" alt="logo" width="98%"></a>
-		  
-		  
 		  </div>
-			   
-		</div><br>    
-	
-	
-	
-	
- 	
-<p style="font-size: 20px;     padding: 10px;"><b> Table with spam Comments labeling</b> </p>	
+		</div>
 
- 	 <form   class="form-contain">
-	 <label for="w3review"></label> 	 <textarea id="w3review" name="w3review" rows="20" cols="160"></textarea>
-	 </form>
-	  
+{# 	 <form   class="form-contain">#}
+{#	 <label for="w3review"></label> 	 <textarea id="w3review" name="w3review" rows="20" cols="160"></textarea>#}
+{#	 </form>#}
+{#	  #}
 	<div class="analyzer">
     <div class="form">
 		<form  >
@@ -46,23 +34,15 @@
             <label>
                 <input    placeholder="Enter your Sentence" type="text"   required>
             </label>
-
-            <button type="submit" class="btn">Detect</button></form>
+            <button type="submit" class="btn">Detector</button>
+        </form>
     </div>
-	 
   </div>
-	
-	
-	
-	 <div  >
-	    <button type="submit" class="btn">Result & Visualization</button>
-
-	</div>	
- <br><br>
-	
-		
-    
-		
+{#	 <div  >#}
+{#	    <button type="submit" class="btn">Result & Visualization</button>#}
+{##}
+{#	</div>#}
+ <br>
  {% endblock %}
 
 {% block page-scripts %}{% endblock %}

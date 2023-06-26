@@ -12,58 +12,20 @@
     <div class="p1">
         <h1 style="font-size: 40px; padding: 25px; align-items: center;"><b>Sentiment Analysis</b></h1>
         <p style="font-size: 130%; text-align: justify; padding: 25px; ">
-            YouTube sentiment analysis can be applied in various contexts, including brand monitoring, market research,
+            The YouTube sentiment analyzer is a machine learning model that analyzes the sentiment (positive, negative, or neutral) of comments on YouTube videos. YouTube sentiment analysis can be applied in various contexts, including brand monitoring, market research,
             content creation, and customer feedback analysis. By analyzing the sentiments expressed by YouTube users,
             content creators and marketers can optimize their strategies, engage with their audience, and improve the
             overall user experience.
         </p>
-        <button class="btn">Start Analyzing!</button>
+        <a href="/avisualize/" class="btn">Visualization</a>
 
     </div>
-
-
     <div class="p2">
-
         <a href="{% url 'sanalysis' %}"><img
                 src="{% static 'images/4059220_1592205269_Untitled-2.jpg' %}" alt="logo"
                 width="98%"></a>
-
-
     </div>
-
 </div>
-<br>
-{#<div class="section">#}
-{#            <div class="container">#}
-{#              <div class="row">#}
-{#                  <div class="col-lg-12">#}
-{#                      {{ gr1|safe }}#}
-{#                  </div>#}
-{#                  <div class="col-lg-12">#}
-{#                      {{ gr2|safe }}#}
-{#                  </div>#}
-{##}
-{#              </div>#}
-{#            </div>#}
-{#        </div>#}
- <div class="section">
-            <div class="container">
-              <div class="row">
-                  <div class="col-lg-12">
-                      {{ gr1|safe }}
-                  </div>
-                  <div class="col-lg-12">
-                      {{ gr2|safe }}
-                  </div>
-                  <div class="col-lg-12">
-                      {{ gr3|safe }}
-                  </div>
-              </div>
-            </div>
-        </div>
-
-
-
 <div class="analyzer">
     <div class="form">
         <form>
@@ -71,17 +33,15 @@
             <label>
                 <input placeholder="Enter your Sentence" type="text" required>
             </label>
-
             <button type="submit" class="btn">Analyzer</button>
         </form>
     </div>
-
 </div>
 
-<div>
-    <button type="submit" class="btnn">Result</button>
-
-</div>
+{#<div>#}
+{#    <button type="submit" class="btnn">Result</button>#}
+{##}
+{#</div>#}
 
  {% endblock %}
 

@@ -1,0 +1,43 @@
+{% extends 'master.html' %}
+
+{% load static %}
+
+{% block page-title %}Youtube Sentiment Analysis{% endblock %}
+
+{% block page-styles %}{% endblock %}
+
+{% block page-content %}
+
+<br>
+    <br>
+    <h1 style="text-align: center;">Sentiment Analysis Visualization</h1>
+ <br>
+    <div class="section" style="align-items: center;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Word Cloud</h2>
+                <div style="margin: 10px;">
+                    {{ gr1|safe }}
+                </div>
+            </div>
+            <br>
+            <div class="col-lg-12">
+                <h2>Accuracy Graph</h2>
+                <div style="margin: 10px;">
+                    {{ gr2|safe }}
+                </div>
+            </div>
+            <br>
+            <div class="col-lg-12">
+                <h2>Total Video Comments</h2>
+                <div style="margin: 10px;">
+                    {{ gr3|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -6,6 +6,8 @@ from datetime import datetime
 import pandas as pd
 from django.conf import settings
 from django.utils import timezone
+from sklearn.ensemble import GradientBoostingClassifier
+
 from youtube_app.fetch_comments import *
 from youtube_app.models import *
 from googleapiclient.discovery import build
@@ -243,3 +245,29 @@ def spamclean_comment():
             )
         except Exception as e:
             print(f"Spam Cleaning comment failed: {e}")
+@shared_task()
+def spamcomment_labeling():
+    print("length of comment", len(SpamCleanComment.objects.all()))
+    for comment1 in SpamCleanComment.objects.filter(spamlabel=''):
+        comment1.spamlabel = label_spam_comments(comment1.original_text)
+        comment1.save()
+    print("Spam Comments labeling done")
+@shared_task
+def spam_model():
+    queryset = SpamCleanComment.objects.filter(label__isnull=False, original_text__isnull=False)
+    data = list(queryset.values())
+    df = pd.DataFrame(data)
+
+    vectorizer = CountVectorizer()
+    X = vectorizer.fit_transform(df['original_text'])
+    encoder = LabelEncoder()
+    y = encoder.fit_transform(df['spamlabel'])
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create and train the Gradient Boosting Classifier
+    gbc_model = GradientBoostingClassifier()
+    gbc_model.fit(X_train, y_train)
+    y_pred = gbc_model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    joblib.dump(gbc_model, os.path.join(model_dir, 'spam_gradient_boosting.h5'))
+    print("Spam Accuracy:", accuracy)

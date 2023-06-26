@@ -124,32 +124,27 @@ def label_spam_comments(comment):
     spam_chars = ['$', '%', '!', '@']
     spam_urls = ['http', 'https', 'www.', 'bit.ly']
     sid = SentimentIntensityAnalyzer()
-    labels = []
-    sentiments = []
-    for comment in comment:
-        # Sentiment Analysis
-        sentiment = sentiment_analyzers(comment)
-        sentiments.append(sentiment)
 
-        # Check for spam words
+    # Sentiment Analysis
+    sentiment = sid.polarity_scores(comment)
+    if sentiment['compound'] < 0:
+
+    # Check for spam words
         if any(word in comment.lower() for word in spam_words):
-            labels.append('spam')
-            continue
+            return 'spam'
 
-        # Check for spam emojis
+    # Check for spam emojis
         if any(emoji in comment for emoji in spam_emojis):
-            labels.append('spam')
-            continue
+            return 'spam'
 
-        # Check for spam characters
+    # Check for spam characters
         if any(char in comment for char in spam_chars):
-            labels.append('spam')
-            continue
+            return 'spam'
 
-        # Check for spam URLs
+    # Check for spam URLs
         if any(url in comment.lower() for url in spam_urls):
-            labels.append('spam')
-            continue
+            return 'spam'
 
-        # Otherwise, label as ham
-        labels.append('ham')
+        return 'spam'
+    else: # Otherwise, label as ham
+        return 'ham'
