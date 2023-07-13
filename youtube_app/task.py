@@ -146,6 +146,8 @@ def english_model():
     y_pred = dt_model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
     joblib.dump(dt_model, os.path.join(model_dir, 'eng_decision_tree.h5'))
+    joblib.dump(vectorizer, os.path.join(model_dir, 'vectorizer.pkl'))
+    joblib.dump(y, os.path.join(model_dir, 'encoder.pkl'))
     print("English Accuracy:", accuracy)
 
 
@@ -270,4 +272,6 @@ def spam_model():
     y_pred = gbc_model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
     joblib.dump(gbc_model, os.path.join(model_dir, 'spam_gradient_boosting.h5'))
+    joblib.dump(vectorizer, os.path.join(model_dir, 'spam_vectorizer.pkl'))
+    joblib.dump(y, os.path.join(model_dir, 'spam_encoder.pkl'))
     print("Spam Accuracy:", accuracy)

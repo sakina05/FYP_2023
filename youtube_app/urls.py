@@ -18,7 +18,9 @@ urlpatterns = [
     path('abc/', views.abc, name='abc'),
     path('avisualize/', views.visualization, name='a-visualize'),
     path('svisualize/', views.spamvisualization, name='s-visualize'),
-
+    path('sentiment-analysis/', views.sentiment_analysis, name='sentiment_analysis')
 ]
+
+
 
 

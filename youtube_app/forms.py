@@ -67,12 +67,23 @@ class YoutubeUrlForm(forms.Form):
         return video_url
 
 
+# class SentimentAnalyzeForm(forms.Form):
+#     input_text = forms.CharField(
+#         min_length=10, max_length=100,
+#         widget=forms.TextInput(attrs={'class': 'form-control px-4', 'placeholder': 'Enter Text here'})
+#     )
+
 class SentimentAnalyzeForm(forms.Form):
     input_text = forms.CharField(
         min_length=10, max_length=100,
         widget=forms.TextInput(attrs={'class': 'form-control px-4', 'placeholder': 'Enter Text here'})
     )
 
+class SpamDetectionForm(forms.Form):
+    input_text = forms.CharField(
+        min_length=10, max_length=100,
+        widget=forms.TextInput(attrs={'class': 'form-control px-4', 'placeholder': 'Enter Text here'})
+    )
 
 
 

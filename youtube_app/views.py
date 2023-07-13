@@ -1,13 +1,11 @@
-
+import os
 from datetime import datetime
-
+from .forms import SentimentAnalyzeForm, SpamDetectionForm
 import mpld3
 import nltk
 from matplotlib import pyplot as plt
 from wordcloud import WordCloud
-
 nltk.download('vader_lexicon')
-
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.backends import ModelBackend
@@ -20,11 +18,15 @@ from django.urls import reverse
 
 from .fetch_comments import get_video_comments
 from .forms import BasicRegForm, LoginForm, YoutubeUrlForm
-
+import os
 import googleapiclient.discovery
 import googleapiclient.errors
 from .models import Comments, YoutubeVideoId, EmojiesInComments, EnglishComment, CleanedComment, EmojiesClean, \
     SpamCleanComment
+
+
+model_dir = os.path.join(settings.BASE_DIR, 'models')
+
 
 
 def homepage(request):
@@ -243,10 +245,12 @@ def count_comment_per_video():
 
 
 def fetch_eng_comments(request, video_id):
+    # print(video_id)
     context = {}
     counts_senti = ''
     counts_pie_senti = ''
     fetch_data = EnglishComment.objects.filter(video_id=video_id, label__isnull=False)
+    print(fetch_data.count())
     if fetch_data.count() > 0:
         counts_senti = video_sentiment_count(fetch_data)
         counts_pie_senti = video_sentiment_pie(fetch_data)
@@ -345,3 +349,98 @@ def spamploting_accuracy():
         plt.text(i, v + 1, str(v), ha='center', va='bottom')
 
     return mpld3.fig_to_html(fig)
+
+import joblib
+import re
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.preprocessing import LabelEncoder
+
+from django.shortcuts import render
+from .forms import SentimentAnalyzeForm
+
+# nltk.download('punkt')
+# nltk.download('stopwords')
+
+model = joblib.load(os.path.join(model_dir, 'spam_gradient_boosting.h5'))
+
+# Load the fitted vectorizer
+vectorizer = joblib.load(os.path.join(model_dir, 'spam_vectorizer.pkl'))
+
+# Load the label encoder
+encoder = LabelEncoder()
+encoder.classes_ = joblib.load(os.path.join(model_dir, 'spam_encoder.pkl'))
+
+def preprocess_comment(comment):
+    cleaned_comment = re.sub(r'http\S+', '', comment)
+    cleaned_comment = word_tokenize(cleaned_comment.lower())
+    stop_words = set(stopwords.words('english'))
+    cleaned_comment = [word for word in cleaned_comment if word not in stop_words]
+    cleaned_comment = ' '.join(cleaned_comment)
+    cleaned_comment = re.sub(r'[@%?&!#$^*::/\|=-><.]', '', cleaned_comment)
+    return cleaned_comment
+
+def sentiment_analysis(request):
+    if request.method == 'POST':
+        form = SentimentAnalyzeForm(request.POST)
+        if form.is_valid():
+            input_text = form.cleaned_data['input_text']
+            cleaned_text = preprocess_comment(input_text)
+
+            # Apply the same preprocessing steps as in training
+            X_pred_encoded = vectorizer.transform([cleaned_text])
+
+            # Make predictions using the trained model
+            predictions = model.predict(X_pred_encoded)
+
+            # Decode the predicted labels using the label encoder
+            predicted_labels = encoder.inverse_transform(predictions)
+            print(predicted_labels)
+            return render(request, 'sentiment-analysis.html', {'form': form, 'predicted_labels': predicted_labels})
+    else:
+        form = SentimentAnalyzeForm()
+
+    return render(request, 'sentiment-analysis.html', {'form': form, 'predicted_labels': None})
+
+
+model = joblib.load(os.path.join(model_dir, 'eng_decision_tree.h5'))
+
+# Load the fitted vectorizer
+vectorizer = joblib.load(os.path.join(model_dir, 'vectorizer.pkl'))
+
+# Load the label encoder
+encoder = LabelEncoder()
+encoder.classes_ = joblib.load(os.path.join(model_dir, 'encoder.pkl'))
+
+def preprocess_comment(comment):
+    cleaned_comment = re.sub(r'http\S+', '', comment)
+    cleaned_comment = word_tokenize(cleaned_comment.lower())
+    stop_words = set(stopwords.words('english'))
+    cleaned_comment = [word for word in cleaned_comment if word not in stop_words]
+    cleaned_comment = ' '.join(cleaned_comment)
+    cleaned_comment = re.sub(r'[@%?&!#$^*::/\|=-><.]', '', cleaned_comment)
+    return cleaned_comment
+
+def spam_detection(request):
+    if request.method == 'POST':
+        form = SpamDetectionForm(request.POST)
+        if form.is_valid():
+            input_text = form.cleaned_data['input_text']
+            cleaned_text = preprocess_comment(input_text)
+
+            # Apply the same preprocessing steps as in training
+            X_pred_encoded = vectorizer.transform([cleaned_text])
+
+            # Make predictions using the trained model
+            predictions = model.predict(X_pred_encoded)
+
+            # Decode the predicted labels using the label encoder
+            predicted_labels = encoder.inverse_transform(predictions)
+            print(predicted_labels)
+            return render(request, 'spam-detection.html', {'form': form, 'predicted_labels': predicted_labels})
+    else:
+        form = SentimentAnalyzeForm()
+
+    return render(request, 'spam-detection.html', {'form': form, 'predicted_labels': None})
+

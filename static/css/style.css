@@ -415,6 +415,19 @@ table {
 	 margin-left: 360px;
 /*	  padding: 50px;*/
     }
+
+  .detector {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 30vh;
+	  width: 50%;
+	  border: 6px dashed grey;
+	  margin-top: 120px;
+	  margin-bottom: 100px;
+	 margin-left: 360px;
+/*	  padding: 50px;*/
+    }
     
     .form {
       text-align: center;

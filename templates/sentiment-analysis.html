@@ -8,6 +8,11 @@
 
 
 {% block page-content %}
+{#    <style>#}
+{#    input[type="text"] {#}
+{#        background-color: lightgrey;#}
+{#    }#}
+{#</style>#}
 <div class="m2">
     <div class="p1">
         <h1 style="font-size: 40px; padding: 25px; align-items: center;"><b>Sentiment Analysis</b></h1>
@@ -28,14 +33,33 @@
 </div>
 <div class="analyzer">
     <div class="form">
-        <form>
-            <p style="font-size:40px;"><b>Sentiment Analyzer</b></p><br>
-            <label>
-                <input placeholder="Enter your Sentence" type="text" required>
-            </label>
-            <button type="submit" class="btn">Analyzer</button>
-        </form>
+       <h2>Sentiment Analyzer</h2>
+    <br>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row align-items-center">
+{#        <div class="col-auto">#}
+            {{ form.input_text }}
+            {% if form.input_text.errors %}
+                <span class="error">{{ form.input_text.errors }}</span>
+            {% endif %}
+{#        </div>#}
+{#    <br>#}
+{#        <div class="col-auto">#}
+            <button type="submit" class="btn">Analyze</button>
+
     </div>
+</form>
+
+{% if predicted_labels %}
+    <div>
+        <h3 style="color: black">Predicted Label: {{ predicted_labels }}</h3>
+    </div>
+{% endif %}
+
+</div>
+    </div>
+
 </div>
 
 {#<div>#}

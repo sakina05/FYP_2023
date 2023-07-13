@@ -148,3 +148,4 @@ def label_spam_comments(comment):
         return 'spam'
     else: # Otherwise, label as ham
         return 'ham'
+
