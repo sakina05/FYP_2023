@@ -7,6 +7,14 @@ import pandas as pd
 from django.conf import settings
 from django.utils import timezone
 from sklearn.ensemble import GradientBoostingClassifier
+import pandas as pd
+import os
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+import joblib
 
 from youtube_app.fetch_comments import *
 from youtube_app.models import *
@@ -21,6 +29,7 @@ from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import train_test_split
 
 model_dir = os.path.join(settings.BASE_DIR, 'models')
+model_dirs = os.path.join(settings.BASE_DIR, 'spam_model')
 
 
 @shared_task
@@ -266,12 +275,15 @@ def spam_model():
     y = encoder.fit_transform(df['spamlabel'])
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Create and train the Gradient Boosting Classifier
-    gbc_model = GradientBoostingClassifier()
-    gbc_model.fit(X_train, y_train)
-    y_pred = gbc_model.predict(X_test)
+    # Create and train the SVM Classifier
+    svm_model = SVC()
+    svm_model.fit(X_train, y_train)
+    y_pred = svm_model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
-    joblib.dump(gbc_model, os.path.join(model_dir, 'spam_gradient_boosting.h5'))
-    joblib.dump(vectorizer, os.path.join(model_dir, 'spam_vectorizer.pkl'))
-    joblib.dump(y, os.path.join(model_dir, 'spam_encoder.pkl'))
+
+      # Change this to your desired directory path
+    joblib.dump(svm_model, os.path.join(model_dirs, 'spam_svm_model.h5'))
+    joblib.dump(vectorizer, os.path.join(model_dirs, 'spam_vectorizer.pkl'))
+    joblib.dump(y, os.path.join(model_dirs, 'spam_encoder.pkl'))
     print("Spam Accuracy:", accuracy)
+

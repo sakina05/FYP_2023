@@ -431,16 +431,35 @@ table {
     
     .form {
       text-align: center;
-	width: 100%;	
+	width: 100%;
     }
 .form head{
 	font-size: 100px;
 }
-    .form input {
+.form input {
       width: 60%;
       height: 40px;
-	background-color: grey;	
+	background-color: grey;
     }
+/*.error-list {*/
+/*    color: white; !* Set the text color to white *!*/
+/*    list-style-type: none;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*}*/
+
+/*.error-item {*/
+/*    color: white; !* Set the text color to white *!*/
+/*}*/
+/*.error-list li.error-item {*/
+/*    color: white;*/
+/*}*/
+
+/*.error-list li.error-item:not(.highlighted-error) {*/
+/*    color: white;*/
+/*}*/
+
+
     
      
 

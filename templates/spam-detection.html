@@ -2,77 +2,52 @@
 
 {% load static %}
 
-{% block page-title %}Youtube Sentiment Analysis{% endblock %}
+{% block page-title %}Spam Detection{% endblock %}
 
 {% block page-styles %}{% endblock %}
 
-
 {% block page-content %}
-	    
-		<div class="m2">
- <div class="p1">
-		<h1 style="font-size: 40px; padding: 25px; align-items: center;" ><b>Spam Detection</b></h1>
-          <p style="font-size: 130%; text-align: justify; padding: 25px; "> 
-		YouTube spam detection is an algorithm that automatically identifies and filters out spam comments on YouTube videos, ensuring a cleaner and more relevant comment section for users. It uses various techniques like content analysis, pattern recognition, and machine learning to accurately identify and flag spam comments. Spam detection in YouTube involves identifying and filtering out irrelevant, misleading, or malicious content that violates YouTube's policies and guidelines.
-          </p>
-{#			<button class="btn" >Start Detecting!</button>	  #}
-		  <a href="/svisualize/" class="btn">Visualization</a>
-	</div>
-          <div class="p2">
-		  <a href="{% url 'sdetection' %}"><img src="{% static 'images/spam-messages-detection.png' %}" alt="logo" width="98%"></a>
-		  </div>
-		</div>
-    <div class="analyzer">
+<div class="m2">
+    <div class="p1">
+        <h1 style="font-size: 40px; padding: 25px; align-items: center;"><b>Spam Detection</b></h1>
+        <p style="font-size: 130%; text-align: justify; padding: 25px;">
+            YouTube spam detection is an algorithm that automatically identifies and filters out spam comments on YouTube videos, ensuring a cleaner and more relevant comment section for users. It uses various techniques like content analysis, pattern recognition, and machine learning to accurately identify and flag spam comments. Spam detection in YouTube involves identifying and filtering out irrelevant, misleading, or malicious content that violates YouTube's policies and guidelines.
+        </p>
+        <a href="/svisualize/" class="btn">Visualization</a>
+    </div>
+    <div class="p2">
+        <a href="{% url 'sdetection' %}"><img src="{% static 'images/spam-messages-detection.png' %}" alt="logo" width="98%"></a>
+    </div>
+</div>
+
+<div class="analyzer">
     <div class="form">
-       <h2>Spam Detector</h2>
-    <br>
-  <form method="post">
+        <h2>Spam Detector</h2>
+        <br>
+        <form method="post">
     {% csrf_token %}
     <div class="form-row align-items-center">
 {#        <div class="col-auto">#}
-            {{ form.input_text }}
-            {% if form.input_text.errors %}
-                <span class="error">{{ form.input_text.errors }}</span>
+{#            <input type="text" name="input_text" id="id_input_text" placeholder="Enter Text here">#}
+            {{ spam_form.input_text }}
+            {% if spam_form.input_text.errors %}
+                <span class="error">{{ spam_form.input_text.errors }}</span>
             {% endif %}
 {#        </div>#}
-{#    <br>#}
 {#        <div class="col-auto">#}
             <button type="submit" class="btn">Detect</button>
-
-    </div>
+        </div>
 </form>
 
-{% if predicted_labels %}
-    <div>
-        <h3 style="color: black">Predicted Label: {{ predicted_labels }}</h3>
-    </div>
-{% endif %}
+            <div>
+                <h3 style="color: black">Predicted Label: {{ predicted_labels }} </h3>
+            </div>
 
-</div>
+{#</div>#}
     </div>
-
 </div>
 
-{# 	 <form   class="form-contain">#}
-{#	 <label for="w3review"></label> 	 <textarea id="w3review" name="w3review" rows="20" cols="160"></textarea>#}
-{#	 </form>#}
-{#	  #}
-{#	<div class="analyzer">#}
-{#    <div class="form">#}
-{#		<form  >#}
-{#		<p style="font-size:40px;"><b>Spam Detection</b></p><br>#}
-{#            <label>#}
-{#                <input    placeholder="Enter your Sentence" type="text"   required>#}
-{#            </label>#}
-{#            <button type="submit" class="btn">Detector</button>#}
-{#        </form>#}
-{#    </div>#}
-{#  </div>#}
-{#	 <div  >#}
-{#	    <button type="submit" class="btn">Result & Visualization</button>#}
-{##}
-{#	</div>#}
- <br>
- {% endblock %}
+
+{% endblock %}
 
 {% block page-scripts %}{% endblock %}

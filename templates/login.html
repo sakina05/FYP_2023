@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 {% load static %}
 
@@ -8,87 +7,62 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-	 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel='stylesheet'>
-     
-
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel='stylesheet'>
     <title>Youtube Sentiment Analysis | Log In</title>
-
 </head>
 <body>
-	
-<div class="main">   
-<div class="part1">
-    
-    <div style="text-align: center;">
-        <p style="color: white; margin-top: 6%;  font-size: 35px;"> <b>Youtube Sentiment Analysis</b> </p>
-    
-        
+<div class="main">
+    <div class="part1">
+        <div style="text-align: center;">
+            <p style="color: white; margin-top: 6%; font-size: 35px;"><b>Youtube Sentiment Analysis</b></p>
+        </div>
     </div>
-
-   
-</div>
-<div class="part2">
-    <br><br><br>
-    <div class="login">
-   <div class="box">
-    <div class="login-table">
-
-        <div class="top">
-            <header>Login</header>
-        </div>
-
-         <form method="post">
-         {% csrf_token %}
-        {% for field in login_form %}
-        <div class="input-field">
-
-{#             <label class="control-label mb-10" for="{{ field.id_for_label }}">#}
-{#                {{ field.label }}#}
-{#                {% if field.field.required %}#}
-{#                    <span class="text-danger">*</span>#}
-{#                {% endif %}#}
-{#            </label>#}
-             {{ field }}
-            {% if field.errors %}
-                {{ field.errors }}
-            {% endif %}
-
-
-        </div>
-
-         {% endfor %}
-
-
-
-
-
-
-
-        <div class="input-field">
-                   
-        <input type="submit" class="submit" value="Login" id="">
-        </div>
-        </form>
-        <div class="two-col">
-            <div class="one">
-{#               <input type="checkbox" name="" id="check">#}
-{#               <label for="check"> Remember Me</label>#}
+    <div class="part2">
+        <br><br><br>
+        <div class="login">
+            <div class="box">
+                <div class="login-table">
+                    <div class="top">
+                        <header>Login</header>
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        {% for field in login_form %}
+                            <div class="input-field">
+                                <label style="color: white;" class="control-label mb-10" for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                </label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <ul class="error-list">
+                                        {% for error in field.errors %}
+                                            <li class="error-item">{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <div class="input-field">
+                            <input type="submit" class="submit" value="Login">
+                        </div>
+                    </form>
+                    <div class="two-col">
+                        <div class="one">
+                            <!-- <input type="checkbox" name="" id="check">
+                            <label for="check">Remember Me</label> -->
+                        </div>
+                        <div class="two">
+                            <label><a href=" ">Forgot password?</a></label>
+                        </div>
+                    </div>
+                    <div class="top">
+                        <br>
+                        <span>Don't have an account? <a href="{% url 'signup' %}" style="color: white;"><b>Sign Up</b></a></span>
+                    </div>
+                </div>
             </div>
-            <div class="two">
-                <label><a href=" ">Forgot password?</a></label>
-            </div>
-        </div>
-        <div class="top">
-            <br>
-            <span>Don't have an account?<a href="{% url 'signup' %}" style="color: white;"><b>Sign Up</b> </a></span>
-            
         </div>
     </div>
 </div>
-	</div>		
- 
- </div>	 
-	</div>
- 
 </body>
 </html>

@@ -12,19 +12,19 @@ CITY_NAME_CHOICES = (
 class BasicRegForm(django.forms.ModelForm):
     username = django.forms.CharField(
         min_length=4, max_length=15,
-        widget=django.forms.TextInput(attrs={'class': 'input', 'placeholder': 'User Name'})
+        widget=django.forms.TextInput(attrs={'class': 'input', 'placeholder': 'username', 'style': 'color: lightgrey;'})
     )
     email = django.forms.EmailField(
         min_length=6, max_length=40,
-        widget=django.forms.TextInput(attrs={'class': 'input', 'placeholder': 'Email Address'})
+        widget=django.forms.TextInput(attrs={'class': 'input', 'placeholder': '@gmail.com', 'style': 'color: lightgrey;'})
     )
     password = django.forms.CharField(
         min_length=6, max_length=20,
-        widget=django.forms.PasswordInput(render_value=False, attrs={'placeholder': 'Password', 'class': 'input'})
+        widget=django.forms.PasswordInput(render_value=False, attrs={'placeholder': 'password', 'class': 'input', 'style': 'color: white;'})
     )
 
     confirm_password = django.forms.CharField(
-        widget=django.forms.PasswordInput(attrs={'placeholder': 'Repeat Password', 'class': 'input'})
+        widget=django.forms.PasswordInput(attrs={'placeholder': 'RepeatPassword', 'class': 'input', 'style': 'color: white;'})
     )
 
     class Meta:
@@ -79,9 +79,11 @@ class SentimentAnalyzeForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control px-4', 'placeholder': 'Enter Text here'})
     )
 
+from django import forms
+
 class SpamDetectionForm(forms.Form):
     input_text = forms.CharField(
-        min_length=10, max_length=100,
+        max_length=500, min_length=10,
         widget=forms.TextInput(attrs={'class': 'form-control px-4', 'placeholder': 'Enter Text here'})
     )
 
