@@ -78,38 +78,6 @@ def fetch_comments():
                 # print(comment)
                 insert_comments_into_database(comment)
 
-
-@shared_task
-def comment_labeling():
-    print("length of comment", len(CleanedComment.objects.all()))
-    # for comment in CleanedComment.objects.filter(label=''):
-    #     print(comment.original_text)
-    #     if len(comment.original_text) > 10:
-    #         lan_code = detect_lang(comment.original_text)
-    #         if lan_code == 'en':
-    #             comment.label = sentiment_analyzers(comment.original_text)
-    #             comment.save()
-    for comment1 in CleanedComment.objects.filter(label=''):
-        comment1.label = sentiment_analyzers(comment1.original_text)
-        comment1.save()
-    print("Comments labeling done")
-
-@shared_task
-def ecomment_labeling():
-    print("length of comment", len(CleanedComment.objects.all()))
-    # for comment in CleanedComment.objects.filter(label=''):
-    #     print(comment.original_text)
-    #     if len(comment.original_text) > 10:
-    #         lan_code = detect_lang(comment.original_text)
-    #         if lan_code == 'en':
-    #             comment.label = sentiment_analyzers(comment.original_text)
-    #             comment.save()
-    for comment1 in EmojiesClean.objects.filter(label=''):
-        comment1.label = sentiment_analyzers(comment1.original_text)
-        comment1.save()
-    print("Emojies labeling done")
-
-
 @shared_task
 def clean_comment():
     print("Inside task clean data or data preprocessing")
@@ -133,7 +101,68 @@ def clean_comment():
         except Exception as e:
             print(f"Cleaning comment failed: {e}")
 
+@shared_task
+def comment_labeling():
+    print("length of comment", len(EnglishComment.objects.all()))
+    # for comment in CleanedComment.objects.filter(label=''):
+    #     print(comment.original_text)
+    #     if len(comment.original_text) > 10:
+    #         lan_code = detect_lang(comment.original_text)
+    #         if lan_code == 'en':
+    #             comment.label = sentiment_analyzers(comment.original_text)
+    #             comment.save()
+    for comment1 in EnglishComment.objects.filter(label=''):
+        comment1.label = sentiment_analyzers(comment1.original_text)
+        comment1.save()
+    print("Comments labeling done")
 
+@shared_task
+def lang_detect():
+    print("length of comment", len(CleanedComment.objects.all()))
+    EnglishComment.objects.all().delete()
+    for comment in CleanedComment.objects.all():
+        print(comment.original_text)
+        if len(comment.original_text.strip()) > 5:  # Check if the text is non-empty and has more than 5 characters.
+            try:
+                lang_code = detect(comment.original_text)
+                if lang_code == 'en':
+                    # Insert the English comment into the EnglishComment model
+                    EnglishComment.objects.create(
+                        comment_id=comment.comment_id,
+                        video_id=comment.video_id,
+                        original_text=comment.original_text,
+                        parent_id=comment.parent_id,
+                        author_name=comment.author_name,
+                        channel_id=comment.channel_id,
+                        published_at=comment.published_at,
+                        created_at=datetime.today(),
+                        update_at=comment.update_at,
+                        label=comment.label
+                    )
+
+            except Exception as e:
+                # Handle the exception (LangDetectException) when language detection fails.
+                print(f"Language detection failed for comment: {comment.original_text}. Error: {str(e)}")
+
+        else:
+            print(f"Ignored comment due to insufficient text: {comment.original_text}")
+
+    print("Detecting the language")
+
+@shared_task
+def ecomment_labeling():
+    print("length of comment", len(CleanedComment.objects.all()))
+    # for comment in CleanedComment.objects.filter(label=''):
+    #     print(comment.original_text)
+    #     if len(comment.original_text) > 10:
+    #         lan_code = detect_lang(comment.original_text)
+    #         if lan_code == 'en':
+    #             comment.label = sentiment_analyzers(comment.original_text)
+    #             comment.save()
+    for comment1 in EmojiesClean.objects.filter(label=''):
+        comment1.label = sentiment_analyzers(comment1.original_text)
+        comment1.save()
+    print("Emojies labeling done")
 
 
 @shared_task
