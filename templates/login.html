@@ -19,42 +19,44 @@
     </div>
     <div class="part2">
         <br><br><br>
-        <div class="login">
-            <div class="box">
-                <div class="login-table">
-                    <div class="top">
-                        <header>Login</header>
-                    </div>
-                    <form method="post">
-                        {% csrf_token %}
-                        {% for field in login_form %}
-                            <div class="input-field">
-                                <label style="color: white;" class="control-label mb-10" for="{{ field.id_for_label }}">
-                                    {{ field.label }}
-                                </label>
-                                {{ field }}
-                                {% if field.errors %}
-                                    <ul class="error-list">
-                                        {% for error in field.errors %}
-                                            <li class="error-item">{{ error }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                        <div class="input-field">
-                            <input type="submit" class="submit" value="Login">
-                        </div>
-                    </form>
-                    <div class="two-col">
-                        <div class="one">
-                            <!-- <input type="checkbox" name="" id="check">
-                            <label for="check">Remember Me</label> -->
-                        </div>
-                        <div class="two">
-                            <label><a href=" ">Forgot password?</a></label>
-                        </div>
-                    </div>
+      <div class="login">
+    <div class="box">
+        <div class="login-table">
+            <div class="top">
+                <header style="color: white;">Login</header>
+            </div>
+            <form method="post">
+    {% csrf_token %}
+    {% for field in login_form %}
+        <div class="input-field" style="padding: 3px; margin-top: 5%;">
+            <label style="color: white;" class="control-label mb-10" for="{{ field.id_for_label }}">
+                {{ field.label }}
+            </label>
+            <br>
+            {{ field }}
+            {% if field.errors %}
+                <ul class="error-list">
+                    {% for error in field.errors %}
+                        <li class="error-item">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <div class="input-field">
+        <input type="submit" class="submit" value="Login" style="height: 45px; width: 87%; border: none; border-radius: 30px; color: black; font-size: 15px; padding: 5%; margin: 3.5%; outline: none; background-color: #9B9B9B;">
+    </div>
+</form>
+
+{#                    <div class="two-col">#}
+{#                        <div class="one">#}
+{#                            <!-- <input type="checkbox" name="" id="check">#}
+{#                            <label for="check">Remember Me</label> -->#}
+{#                        </div>#}
+{#                        <div class="two">#}
+{#                            <label><a href=" ">Forgot password?</a></label>#}
+{#                        </div>#}
+{#                    </div>#}
                     <div class="top">
                         <br>
                         <span>Don't have an account? <a href="{% url 'signup' %}" style="color: white;"><b>Sign Up</b></a></span>

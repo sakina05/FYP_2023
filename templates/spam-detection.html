@@ -38,11 +38,11 @@
             <button type="submit" class="btn">Detect</button>
         </div>
 </form>
-
+{% if predicted_labels %}
             <div>
                 <h3 style="color: black">Predicted Label: {{ predicted_labels }} </h3>
             </div>
-
+{% endif %}
 {#</div>#}
     </div>
 </div>

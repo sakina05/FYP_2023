@@ -1,14 +1,14 @@
 import re
 import emoji
-from emot.emo_unicode import UNICODE_EMOJI
+# from emot.emo_unicode import UNICODE_EMOJI
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from langdetect import detect, LangDetectException
+from langdetect import detect
 
 sentiments = SentimentIntensityAnalyzer()
-
 
 def get_video_comments(youtube, **kwargs):
     comments = []
@@ -63,7 +63,6 @@ def get_video_comments(youtube, **kwargs):
 
     return comments
 
-
 def sentiment_analyzers(comment):
     sentiment = ''
     compound_score = sentiments.polarity_scores(comment)["compound"]
@@ -75,7 +74,6 @@ def sentiment_analyzers(comment):
         sentiment = 'Neutral'
     return sentiment
 
-
 def detect_lang(comment):
     try:
         lang_code = detect(comment)
@@ -85,7 +83,6 @@ def detect_lang(comment):
         # Handle the exception when no features are detected
         # print(f"Error detecting language: {str(e)}")
         return ""
-
 
 def comment_cleaning(comment):
     start_cleaning = re.sub(r'http\S+', '', comment)
@@ -100,22 +97,36 @@ def comment_cleaning(comment):
     clean_emoji = " ".join([chr for chr in comment if any(i in chr for i in emoji_list)])
     return clean_text, clean_emoji
 
-
 def find_emoji_text(comment):
     emoji_list = [c for c in comment if c in emoji.UNICODE_EMOJI["en"]]
     clean_emoji = " ".join([chr for chr in comment if any(i in chr for i in emoji_list)])
     return clean_emoji
 
-
+def is_english(comment):
+    try:
+        return detect(comment) == 'en'
+    except:
+        return False
 
 def spamcomment_cleaning(comment):
-    start_cleaning = re.sub(r'http\S+', '', comment)
-    start_cleaning = word_tokenize(start_cleaning.lower())
+    # Check if the comment is in English
+    if not is_english(comment):
+        return None
+
+    # Remove extra whitespaces and newlines
+    cleaned_comment = re.sub(r'\s+', ' ', comment).strip()
+
+    # Tokenize the comment and convert to lowercase
+    words = word_tokenize(cleaned_comment.lower())
+
+    # Remove stopwords
     stop_words = set(stopwords.words('english'))
-    start_cleaning = [word for word in start_cleaning if word not in stop_words]
-    start_cleaning = ' '.join(start_cleaning)
-    start_cleaning = re.sub(r'[@%?&!#$^*::/\|=-><.]', '', start_cleaning)
-    return start_cleaning
+    words = [word for word in words if word not in stop_words]
+
+    # Reconstruct the cleaned comment
+    cleaned_comment = ' '.join(words)
+
+    return cleaned_comment
 
 
 def label_spam_comments(comment):

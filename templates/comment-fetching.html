@@ -10,11 +10,12 @@
 {% block page-content %}
 
     <p style="font-size: 40px; text-align: center; margin-top: 6%;"><b>COMMENTS FETCHING</b></p>
-<div class="m2">
+
+    <div class="m2">
   <div class="p1">
-    <b style="padding: 1%; font-family: 'Your Desired Font', sans-serif; font-size: 24px;">INSERT URL</b>
-    <div id="myform" style="padding: 1%;">
-      <form method="post" class="narrow-w form-search d-flex align-items-stretch mb-3" data-aos="fade-up"
+    <b style="padding: 3%; font-family: 'Your Desired Font', sans-serif; font-size: 24px;">INSERT URL</b>
+    <div id="myform", style="padding: 1%; margin: 5px">
+          <form method="post" class="narrow-w form-search d-flex align-items-stretch mb-3" data-aos="fade-up"
             data-aos-delay="100" style="padding: 1%;">
         {% csrf_token %}
         {% for field in yt_form %}
@@ -22,20 +23,22 @@
           <div class="input-group">
             <input type="text" name="{{ field.name }}" class="input-field input"
                    placeholder="Enter URL here"
-                   style="height: 20px; width: 75%; background-color: #6E6E6E; border-radius: 3px; color: #fff;
-                          font-size: 12px; padding: 3.5%; outline: none;">
+                   style="height: 20px; width: 80%; background-color: gray; border-radius: 3px; color: #fff;
+                          font-size: 15px; padding: 3%;
+                          outline: none;">
           </div>
           {% if field.errors %}
           {% for error in field.errors %}
-          <div class="col-md-11 alert-danger m-2" style="font-size: medium;">{{ error }}</div>
+          <div class="col-md-11 alert-danger m-2" style="font-size: large;">{{ error }}</div>
           {% endfor %}
           {% endif %}
         </div>
         {% endfor %}
+ <button type="submit" class="btn btn-primary" style="margin-top: 10px; margin-left: 0px">Search</button>
       </form>
     </div>
 
-    <button type="submit" class="btn btn-primary" style="margin-left: 2%;">Search</button>
+
   </div>
 
   <div class="p2">

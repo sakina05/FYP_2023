@@ -47,17 +47,17 @@ class BasicRegForm(django.forms.ModelForm):
 class LoginForm(django.forms.Form):
     email = forms.EmailField(
         min_length=6, max_length=40,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'})
+        widget=forms.TextInput(attrs={'class': 'input', 'placeholder': 'Email Address', 'style': 'background-color: light-grey;'})
     )
     password = forms.CharField(
         min_length=6, max_length=20,
-        widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'})
+        widget=forms.PasswordInput(attrs={'class': 'input', 'placeholder': 'Password'})
     )
 
 class YoutubeUrlForm(forms.Form):
     video_id = forms.CharField(
         min_length=10, max_length=100,
-        widget=forms.TextInput(attrs={'class': 'form-control px-4', 'placeholder': 'Enter Urls here'})
+        widget=forms.TextInput(attrs={'placeholder': 'Enter Urls here'})
     )
 
     def clean_video_id(self):

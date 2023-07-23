@@ -15,11 +15,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 import joblib
-
 from youtube_app.fetch_comments import *
 from youtube_app.models import *
 from googleapiclient.discovery import build
-from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction.text import CountVectorizer
@@ -31,13 +29,11 @@ from sklearn.model_selection import train_test_split
 model_dir = os.path.join(settings.BASE_DIR, 'models')
 model_dirs = os.path.join(settings.BASE_DIR, 'spam_model')
 
-
 @shared_task
 def task_one():
     print("\n\n\n\n\n\n\n\n#######################################\n")
     print(datetime.now())
     print("\n#######################################\n\n\n\n\n\n\n\n")
-
 
 @shared_task
 def fetch_comments():
@@ -151,7 +147,7 @@ def lang_detect():
 
 @shared_task
 def ecomment_labeling():
-    print("length of comment", len(CleanedComment.objects.all()))
+    print("length of comment", len(EmojiesClean.objects.all()))
     # for comment in CleanedComment.objects.filter(label=''):
     #     print(comment.original_text)
     #     if len(comment.original_text) > 10:
@@ -209,7 +205,6 @@ def e_model():
     joblib.dump(dt_model, os.path.join(model_dir, 'emoji_decision_tree.h5'))
     print("Emoji Accuracy:", accuracy)
 
-
 def insert_comments_into_database(comment):
     Comments.objects.create(
         comment_id=comment['comment_id'],
@@ -225,11 +220,12 @@ def insert_comments_into_database(comment):
         spamlabel=comment['spamlabel']
     )
 
-
 @shared_task()
 def emoji_extraction():
+    # EmojiesInComments.objects.all().delete()
     for comment in Comments.objects.all():
         emoji_list = find_emoji_text(comment.original_text)
+        print(emoji_list)
         if emoji_list:
             EmojiesInComments.objects.create(
                 comment_id=comment.comment_id,
@@ -247,7 +243,7 @@ def emoji_extraction():
 
 @shared_task()
 def demoji_the_emoji():
-    EmojiesClean.objects.all().delete()
+    # EmojiesClean.objects.all().delete()
     for comment in EmojiesInComments.objects.all():
         text_emoji = demoji.findall(comment.original_text)
         EmojiesClean.objects.create(
@@ -265,7 +261,7 @@ def demoji_the_emoji():
 @shared_task
 def spamclean_comment():
     print("Inside task clean data or data preprocessing")
-    SpamCleanComment.objects.all().delete()
+    # SpamCleanComment.objects.all().delete()
     for comment in Comments.objects.all():
         try:
             start_cleaning = spamcomment_cleaning(comment.original_text)
@@ -315,4 +311,3 @@ def spam_model():
     joblib.dump(vectorizer, os.path.join(model_dirs, 'spam_vectorizer.pkl'))
     joblib.dump(y, os.path.join(model_dirs, 'spam_encoder.pkl'))
     print("Spam Accuracy:", accuracy)
-

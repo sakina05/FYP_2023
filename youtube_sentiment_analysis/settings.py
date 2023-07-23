@@ -190,66 +190,62 @@ CELERY_BEAT_SCHEDULE = {
     #         'schedule': crontab(minute='*/5'),
     #         # 'schedule': crontab(hour=3, minute=2),
     #     },
-    # 5 done
-    'eng-model':
-        {
-            'task': 'youtube_app.task.english_model',
-            'schedule': crontab(minute='*/5'),
-            # 'schedule': crontab(hour=6, minute=2)
-        },
-
-    # # 6 done
-    # 'dataa-labeling':
+    # # 5 done
+    # 'eng-model':
     #     {
-    #         'task': 'youtube_app.task.ecomment_labeling',
-    #         'schedule': crontab(minute='*/1'),
-    #         # 'schedule': crontab(hour=3, minute=2),
+    #         'task': 'youtube_app.task.english_model',
+    #         'schedule': crontab(minute='*/5'),
+    #         # 'schedule': crontab(hour=6, minute=2)
     #     },
-
-
-    # 4 done
+    # 6 done
     # 'extract-emoji':
     #     {
     #         'task': 'youtube_app.task.emoji_extraction',
-    #         'schedule': crontab(minute='*/1'),
+    #         'schedule': crontab(minute='*/5'),
     #         # 'schedule': crontab(hour=3, minute=2),
     #     },
-
-    # 5
-    #  'clean_emoji_model':
-    #      {
+    # 7 done
+    # 'clean_emoji_model':
+    #     {
     #          'task': 'youtube_app.task.demoji_the_emoji',
-    #         'schedule': crontab(minute='*/1'),
-    # #         'schedule': crontab(hour=5, minute=2)
-    #      },
-    # 8
-    #  'clean_emji_model':
-    #      {
-    #          'task': 'youtube_app.task.e_model',
-    #          'schedule': crontab(minute='*/1'),
-    # #         # 'schedule': crontab(hour=7, minute=2)
+    #          'schedule': crontab(minute='*/3'),
+    # #        'schedule': crontab(hour=5, minute=2)
     #     },
-    # 9
+    # # 8 done
+    # 'dataa-labeling':
+    #     {
+    #         'task': 'youtube_app.task.ecomment_labeling',
+    #         'schedule': crontab(minute='*/3'),
+    #         # 'schedule': crontab(hour=3, minute=2),
+    #     },
+    # # 9 done EMOJI MODEL
+    # 'clean_emji_model':
+    #     {
+    #          'task': 'youtube_app.task.e_model',
+    #          'schedule': crontab(minute='*/2'),
+    # #        # 'schedule': crontab(hour=7, minute=2)
+    #     },
+    # 10 done
     # 'spam_cleaning':
     #     {
     #         'task': 'youtube_app.task.spamclean_comment',
-    #         'schedule': crontab(minute='*/1'),
+    #         'schedule': crontab(minute='*/3'),
     #         #         # 'schedule': crontab(hour=7, minute=2)
     #     },
-    # 10
+    # 11 done
     # 'spam_labeling':
     #     {
     #         'task': 'youtube_app.task.spamcomment_labeling',
-    #         'schedule': crontab(minute='*/1'),
+    #         'schedule': crontab(minute='*/3'),
     #         #         # 'schedule': crontab(hour=7, minute=2)
     #     },
-    # 11
-    # 'spam_model':
-    #       {
-    #           'task': 'youtube_app.task.spam_model',
-    #           'schedule': crontab(minute='*/1'),
-    #  #         # 'schedule': crontab(hour=7, minute=2)
-    #      },
+    # 12 done
+    'spam_model':
+          {
+              'task': 'youtube_app.task.spam_model',
+              'schedule': crontab(minute='*/1'),
+     #         # 'schedule': crontab(hour=7, minute=2)
+         },
 
 }
 

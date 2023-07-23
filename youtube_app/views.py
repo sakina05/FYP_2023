@@ -1,6 +1,14 @@
 import os
 from datetime import datetime
+import joblib
+import re
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.preprocessing import LabelEncoder
 
+from django.shortcuts import render
+from .forms import SentimentAnalyzeForm
 import form as form
 
 from .forms import SentimentAnalyzeForm, SpamDetectionForm
@@ -26,7 +34,10 @@ import googleapiclient.discovery
 import googleapiclient.errors
 from .models import Comments, YoutubeVideoId, EmojiesInComments, EnglishComment, CleanedComment, EmojiesClean, \
     SpamCleanComment
-
+from django.shortcuts import redirect
+from django.contrib.auth import get_user_model
+from django.contrib.auth.backends import ModelBackend
+from django.db.models import Count
 
 model_dir = os.path.join(settings.BASE_DIR, 'models')
 model_dirs = os.path.join(settings.BASE_DIR, 'spam_model')
@@ -57,10 +68,6 @@ def models(request):
 #
 # def signup(request):
 #     return render(request, "signup.html")
-
-
-from django.contrib.auth import get_user_model
-from django.contrib.auth.backends import ModelBackend
 
 def index(request):
     context = {}
@@ -127,7 +134,6 @@ def logout_page(request):
     return redirect('index')
 
 
-
 def insert_url(request):
     context = {}
     yt_form = YoutubeUrlForm()
@@ -146,7 +152,8 @@ def insert_url(request):
                         video_url=yt_form.cleaned_data.get('video_id')
                     )
                     messages.info(request, 'Please confirm your email address to complete the registration')
-                    return HttpResponseRedirect(reverse('fetch-comm'))
+                    # Redirect to the 'fetch_comments' view to update the videos queryset
+                    return redirect('fetch-comm')
                 else:
                     messages.error(request, "ERROR! while saving info. Please try again.")
             else:
@@ -154,8 +161,39 @@ def insert_url(request):
         else:
             messages.error(request, "ERROR! Invalid form. Please try again.")
     context['yt_form'] = yt_form
+    # Fetch all video links again after adding a new link
     context['videos'] = YoutubeVideoId.objects.all()
     return render(request, 'comment-fetching.html', context)
+
+
+# def insert_url(request):
+#     context = {}
+#     yt_form = YoutubeUrlForm()
+#     if request.method == 'POST':
+#         yt_form = YoutubeUrlForm(request.POST)
+#         if yt_form.is_valid():
+#             video_id = yt_form.cleaned_data.get('video_id')
+#             video_id_parts = video_id.split('=')  # Split the video_id by '='
+#             if len(video_id_parts) > 1:
+#                 video_id = video_id_parts[1]
+#                 video_id_parts_ampersand = video_id.split('&')  # Split the video_id by '&'
+#                 if len(video_id_parts_ampersand) > 0:
+#                     video_id = video_id_parts_ampersand[0]
+#                     YoutubeVideoId.objects.create(
+#                         id=video_id,
+#                         video_url=yt_form.cleaned_data.get('video_id')
+#                     )
+#                     messages.info(request, 'Please confirm your email address to complete the registration')
+#                     return HttpResponseRedirect(reverse('fetch-comm'))
+#                 else:
+#                     messages.error(request, "ERROR! while saving info. Please try again.")
+#             else:
+#                 messages.error(request, "ERROR! Invalid video URL. Please try again.")
+#         else:
+#             messages.error(request, "ERROR! Invalid form. Please try again.")
+#     context['yt_form'] = yt_form
+#     context['videos'] = YoutubeVideoId.objects.all()
+#     return render(request, 'comment-fetching.html', context)
 
 
 def fetch_comments(request):
@@ -203,10 +241,6 @@ def fetch_comments(request):
         'videos': videos
     }
     return render(request, 'comment-fetching.html', context)
-
-
-from django.db.models import Count
-
 
 def abc(request):
     demo_video_id = YoutubeVideoId.objects.all()
@@ -283,8 +317,7 @@ def video_sentiment_count(vide_data):
     plt.xlabel('Sentiment')
     plt.ylabel('Counts')
     return mpld3.fig_to_html(fig)
-#
-#
+
 def video_sentiment_pie(vide_data):
     fig = plt.figure(figsize=(8, 5))
     v_count = vide_data.values('label').annotate(count=Count('label'))
@@ -351,15 +384,6 @@ def spamploting_accuracy():
 
     return mpld3.fig_to_html(fig)
 
-import joblib
-import re
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.preprocessing import LabelEncoder
-
-from django.shortcuts import render
-from .forms import SentimentAnalyzeForm
 
 # nltk.download('punkt')
 # nltk.download('stopwords')
